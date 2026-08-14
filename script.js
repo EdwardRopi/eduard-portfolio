@@ -266,6 +266,21 @@ function fillStrip() {
 
 fillStrip();
 
+/* ── палитра работ во вставке ───────────────────────────── */
+
+const swatches = document.getElementById('swatches');
+
+WORKS.forEach((work, i) => {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'swatch';
+  b.style.setProperty('--accent', work.accent);
+  b.innerHTML = `<span>${work.name}</span>`;
+  b.setAttribute('aria-label', `Открыть работу «${work.name}»`);
+  b.addEventListener('click', () => openViewer(work, i));
+  swatches.append(b);
+});
+
 /* ── просмотр работы целиком ────────────────────────────── */
 
 const viewer = document.getElementById('viewer');
