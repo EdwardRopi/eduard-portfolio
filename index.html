@@ -9,9 +9,24 @@
 <meta property="og:description" content="12 сайтов: лендинги, визитки, каталоги. Каждый — со своей визуальной идеей.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/shots/talay-dao-hero.jpg">
+<meta name="theme-color" content="#e9e9e3">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="styles.css">
+<script>
+  /* Тема выбирается до первой отрисовки, иначе при ночном режиме
+     страница успевает моргнуть белым. */
+  (function () {
+    var mode = 'auto';
+    try { mode = localStorage.getItem('theme') || 'auto'; } catch (e) {}
+    var dark = mode === 'dark' ||
+      (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var root = document.documentElement;
+    root.dataset.theme = dark ? 'dark' : 'light';
+    root.dataset.mode = mode;
+    root.classList.add('is-first');
+  })();
+</script>
 </head>
 <body>
 
@@ -30,14 +45,23 @@
     <a href="#process">Как я работаю</a>
     <a href="#contact">Контакты</a>
   </nav>
+  <div class="theme" role="group" aria-label="Оформление">
+    <button class="theme__btn" type="button" data-set="auto">Авто</button>
+    <button class="theme__btn" type="button" data-set="light">День</button>
+    <button class="theme__btn" type="button" data-set="dark">Ночь</button>
+  </div>
   <a class="btn btn--solid bar__cta" href="#contact">Написать</a>
+  <span class="bar__ink" aria-hidden="true"></span>
 </header>
 
 <main id="top">
 
   <section class="hero">
     <p class="eyebrow">Портфолио &nbsp;·&nbsp; сайты 2026 года</p>
-    <h1 class="hero__title">Двенадцать сайтов.<br><em>Ни одного похожего.</em></h1>
+    <h1 class="hero__title">
+      <span><i>Двенадцать сайтов.</i></span>
+      <span><i><em>Ни одного похожего.</em></i></span>
+    </h1>
     <div class="hero__row">
       <p class="hero__lead">
         Делаю сайты для небольшого бизнеса: придумываю визуальную идею, рисую,

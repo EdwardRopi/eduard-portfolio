@@ -224,9 +224,14 @@ function prepareScroll(frame, work) {
 
 function render(kind) {
   grid.textContent = '';
+  let shown = 0;
   WORKS.forEach((work, i) => {
     if (kind !== 'all' && work.kind !== kind) return;
-    grid.append(cardFor(work, i));
+    const card = cardFor(work, i);
+    // порядковый номер в показанной сетке — по нему идёт волна появления
+    card.style.setProperty('--i', Math.min(shown, 5));
+    shown += 1;
+    grid.append(card);
   });
 }
 
@@ -354,9 +359,91 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+/* ── день и ночь ────────────────────────────────────────── */
+
+const root = document.documentElement;
+const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+const themeButtons = [...document.querySelectorAll('.theme__btn')];
+const themeMeta = document.querySelector('meta[name="theme-color"]');
+const PAPER = { light: '#e9e9e3', dark: '#101317' };
+
+function resolveTheme(mode) {
+  if (mode === 'dark' || mode === 'light') return mode;
+  return systemDark.matches ? 'dark' : 'light';
+}
+
+function applyTheme(mode) {
+  const theme = resolveTheme(mode);
+  root.dataset.theme = theme;
+  root.dataset.mode = mode;
+  if (themeMeta) themeMeta.content = PAPER[theme];
+  themeButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.set === mode)));
+  try { localStorage.setItem('theme', mode); } catch (e) { /* приватный режим — переживём */ }
+  window.dispatchEvent(new Event('themechange'));
+}
+
+/* Смена темы идёт кругом от нажатой кнопки: краска расходится по листу.
+   Где View Transitions не поддержаны — просто переключаемся. */
+function switchTheme(mode, origin) {
+  if (!document.startViewTransition || lessMotion.matches || !origin) {
+    applyTheme(mode);
+    return;
+  }
+  const view = document.startViewTransition(() => applyTheme(mode));
+  view.ready.then(() => {
+    const reach = Math.hypot(
+      Math.max(origin.x, window.innerWidth - origin.x),
+      Math.max(origin.y, window.innerHeight - origin.y),
+    );
+    root.animate(
+      {
+        clipPath: [
+          `circle(0px at ${origin.x}px ${origin.y}px)`,
+          `circle(${reach}px at ${origin.x}px ${origin.y}px)`,
+        ],
+      },
+      {
+        duration: 650,
+        easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        pseudoElement: '::view-transition-new(root)',
+      },
+    );
+  }).catch(() => {});
+}
+
+themeButtons.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const box = btn.getBoundingClientRect();
+    switchTheme(btn.dataset.set, { x: box.left + box.width / 2, y: box.bottom });
+  });
+});
+
+systemDark.addEventListener('change', () => {
+  if (root.dataset.mode === 'auto') applyTheme('auto');
+});
+
+applyTheme(root.dataset.mode || 'auto');
+
+/* ── шкала прочитанного в верхней панели ────────────────── */
+
+const bar = document.querySelector('.bar');
+
+function markProgress() {
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  const read = total > 0 ? Math.min(1, window.scrollY / total) : 0;
+  bar.style.setProperty('--read', read.toFixed(4));
+}
+
+window.addEventListener('scroll', markProgress, { passive: true });
+window.addEventListener('resize', markProgress);
+markProgress();
+
 /* ── живой фон: краски и летящие метки ──────────────────── */
 
-const INKS = ['#1f2bff', '#e5462e', '#0fae9f', '#e0409b', '#f0a500', '#6b3be8'];
+const INKS = {
+  light: ['#1f2bff', '#e5462e', '#0fae9f', '#e0409b', '#f0a500', '#6b3be8'],
+  dark: ['#6f7bff', '#ff6f57', '#2fd4c2', '#ff72bd', '#ffc247', '#a184ff'],
+};
 
 function paintBackground() {
   const canvas = document.getElementById('bg');
@@ -366,23 +453,24 @@ function paintBackground() {
   let h = 0;
 
   // на телефоне красок и меток меньше — рисовать дешевле
-  const light = window.innerWidth < 760;
-  const inks = light ? INKS.slice(0, 4) : INKS;
+  const small = window.innerWidth < 760;
+  const count = small ? 4 : 6;
 
   // большие мягкие пятна краски: медленно расходятся и перекрываются
-  const blobs = inks.map((color, i) => ({
-    color,
+  const blobs = Array.from({ length: count }, (_, i) => ({
+    ink: i,
     x: 0.12 + (i % 3) * 0.38,
     y: i < 3 ? 0.22 : 0.72,
     drift: 0.10 + (i % 3) * 0.03,
     speed: 0.018 + i * 0.004,
     phase: i * 1.7,
     size: 0.42 + (i % 2) * 0.16,
+    pull: 0.4 + (i % 3) * 0.3,
   }));
 
   // мелкие метки — как обрезки цветной бумаги в печатном цехе
-  const chips = Array.from({ length: light ? 10 : 22 }, (_, i) => ({
-    color: INKS[i % INKS.length],
+  const chips = Array.from({ length: small ? 10 : 22 }, (_, i) => ({
+    ink: i % 6,
     x: Math.random(),
     y: Math.random(),
     size: 5 + Math.random() * 9,
@@ -392,6 +480,13 @@ function paintBackground() {
     spin: (Math.random() - 0.5) * 0.5,
   }));
 
+  // краски тянутся за курсором — еле заметно, но лист оживает
+  const pointer = { x: 0, y: 0, atX: 0, atY: 0 };
+  window.addEventListener('pointermove', (e) => {
+    pointer.x = (e.clientX / window.innerWidth - 0.5) * 60;
+    pointer.y = (e.clientY / window.innerHeight - 0.5) * 60;
+  }, { passive: true });
+
   function resize() {
     w = window.innerWidth;
     h = window.innerHeight;
@@ -400,18 +495,25 @@ function paintBackground() {
   }
 
   function frame(seconds) {
+    const night = root.dataset.theme === 'dark';
+    const inks = night ? INKS.dark : INKS.light;
+
+    pointer.atX += (pointer.x - pointer.atX) * 0.05;
+    pointer.atY += (pointer.y - pointer.atY) * 0.05;
+
     ctx.clearRect(0, 0, w, h);
-    ctx.globalCompositeOperation = 'multiply';
+    // днём краска ложится на бумагу (умножение), ночью светится (осветление)
+    ctx.globalCompositeOperation = night ? 'screen' : 'multiply';
 
     const reach = Math.max(w, h);
     blobs.forEach((b) => {
-      const x = (b.x + Math.sin(seconds * b.speed * 6.28 + b.phase) * b.drift) * w;
-      const y = (b.y + Math.cos(seconds * b.speed * 5.1 + b.phase) * b.drift * 0.8) * h;
+      const x = (b.x + Math.sin(seconds * b.speed * 6.28 + b.phase) * b.drift) * w + pointer.atX * b.pull;
+      const y = (b.y + Math.cos(seconds * b.speed * 5.1 + b.phase) * b.drift * 0.8) * h + pointer.atY * b.pull;
       const r = reach * b.size;
       const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-      g.addColorStop(0, b.color);
-      g.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.globalAlpha = 0.13;
+      g.addColorStop(0, inks[b.ink]);
+      g.addColorStop(1, night ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0)');
+      ctx.globalAlpha = night ? 0.16 : 0.13;
       ctx.fillStyle = g;
       ctx.beginPath();
       ctx.arc(x, y, r, 0, 6.29);
@@ -422,8 +524,8 @@ function paintBackground() {
       // плывут вверх и по кругу возвращаются снизу
       const y = ((c.y - seconds * c.speed) % 1 + 1) % 1;
       const x = c.x + Math.sin(seconds * 0.35 + c.phase) * c.sway;
-      ctx.globalAlpha = 0.42;
-      ctx.fillStyle = c.color;
+      ctx.globalAlpha = night ? 0.5 : 0.42;
+      ctx.fillStyle = inks[c.ink];
       ctx.save();
       ctx.translate(x * w, y * h);
       ctx.rotate(seconds * c.spin + c.phase);
@@ -439,7 +541,9 @@ function paintBackground() {
   window.addEventListener('resize', resize);
 
   if (lessMotion.matches) {
+    // без анимации рисуем один кадр и перерисовываем при смене темы
     frame(0);
+    window.addEventListener('themechange', () => frame(0));
     return;
   }
 
