@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Эдуард — сайты для малого бизнеса. Портфолио</title>
+<meta name="description" content="Портфолио веб-дизайнера и разработчика: 15 сайтов для малого бизнеса. Дизайн, вёрстка и публикация — один исполнитель.">
+<meta property="og:title" content="Эдуард — сайты для малого бизнеса">
+<meta property="og:description" content="15 сайтов: лендинги, визитки, каталоги. Каждый — со своей визуальной идеей.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/shots/talay-dao-hero.jpg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip" href="#works">Перейти к работам</a>
+
+<header class="bar">
+  <a class="bar__me" href="#top">
+    <span class="bar__name">ЭДУАРД</span>
+    <span class="bar__role">веб-дизайн и разработка</span>
+  </a>
+  <nav class="bar__nav" aria-label="Разделы">
+    <a href="#works">Работы</a>
+    <a href="#process">Как я работаю</a>
+    <a href="#contact">Контакты</a>
+  </nav>
+  <a class="btn btn--solid bar__cta" href="#contact">Написать</a>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <p class="eyebrow">Портфолио &nbsp;·&nbsp; сайты 2026 года</p>
+    <h1 class="hero__title">Пятнадцать сайтов.<br>Ни одного похожего.</h1>
+    <div class="hero__row">
+      <p class="hero__lead">
+        Делаю сайты для небольшого бизнеса: придумываю визуальную идею, рисую,
+        верстаю руками и выкладываю в интернет. От первого разговора до
+        работающего адреса — один исполнитель, без агентства и конструкторов.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--solid" href="#works">Смотреть работы</a>
+        <a class="btn" href="#contact">Обсудить свой сайт</a>
+      </div>
+    </div>
+
+    <!-- лента превью: доказательство заголовка. Клик по кадру открывает работу -->
+    <div class="strip" aria-label="Превью работ">
+      <div class="strip__track" id="strip"></div>
+    </div>
+  </section>
+
+  <section class="facts" aria-label="Коротко о работе">
+    <dl>
+      <div><dt>15</dt><dd>сайтов сделано и выложено</dd></div>
+      <div><dt>3–7</dt><dd>дней на сайт-визитку</dd></div>
+      <div><dt>1</dt><dd>исполнитель: дизайн, вёрстка, публикация</dd></div>
+      <div><dt>100%</dt><dd>работ адаптированы под телефон</dd></div>
+    </dl>
+  </section>
+
+  <section class="works" id="works">
+    <div class="works__head">
+      <h2 class="h2">Работы</h2>
+      <p class="works__note">
+        Каждая карточка листает сайт целиком — наведите курсор.
+        Нажмите, чтобы открыть страницу в полный размер.
+      </p>
+      <div class="filters" role="group" aria-label="Фильтр работ">
+        <button class="filter is-on" data-kind="all">Все</button>
+        <button class="filter" data-kind="landing">Лендинги</button>
+        <button class="filter" data-kind="card">Сайты-визитки</button>
+        <button class="filter" data-kind="shop">Каталоги и магазины</button>
+      </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <noscript>
+      <p class="noscript">
+        Работы подгружаются скриптом — включите JavaScript или напишите мне,
+        и я пришлю ссылки на сайты списком.
+      </p>
+    </noscript>
+  </section>
+
+  <section class="process" id="process">
+    <h2 class="h2">Как я работаю</h2>
+    <ol class="steps">
+      <li>
+        <h3>Разговор и бриф</h3>
+        <p>Спрашиваю про бизнес, клиентов и то, что должно происходить после
+          захода на сайт. Присылаю короткий бриф — на него уходит 15 минут.</p>
+      </li>
+      <li>
+        <h3>Идея и первый экран</h3>
+        <p>Придумываю, чем этот сайт будет отличаться от соседей по нише,
+          и собираю первый экран сразу в браузере — не картинкой, а живой страницей.</p>
+      </li>
+      <li>
+        <h3>Сборка и правки</h3>
+        <p>Верстаю остальные разделы, наполняю вашими текстами и фотографиями.
+          Правки вносим по ходу, на рабочей ссылке — вы видите каждый шаг.</p>
+      </li>
+      <li>
+        <h3>Публикация и передача</h3>
+        <p>Подключаю домен, настраиваю формы заявок, проверяю телефоны и скорость.
+          Отдаю исходники и показываю, как менять тексты самому.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="more">
+    <h2 class="h2">Кроме сайтов</h2>
+    <div class="more__grid">
+      <article>
+        <h3>Мини-приложения в Telegram</h3>
+        <p>Трекер трезвости и трекер цикла: интерфейс, база данных, оплата
+          и уведомления. Работают внутри мессенджера, без установки.</p>
+      </article>
+      <article>
+        <h3>Магазины и каталоги</h3>
+        <p>Импорт прайсов поставщиков, фильтры, карточки товара, корзина
+          и заявка. Каталог редактируется одним файлом, без тяжёлой админки.</p>
+      </article>
+      <article>
+        <h3>Автоматизация рутины</h3>
+        <p>Скрипты, которые собирают данные, готовят отчёты и раскладывают
+          заявки по местам, — чтобы этим не занимался человек.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="contact__text">
+      <h2 class="h2">Напишите — отвечу сегодня</h2>
+      <p>Расскажите, что за бизнес и какой сайт нужен. В ответ пришлю сроки,
+        цену и пару примеров из вашей ниши. Консультация ни к чему не обязывает.</p>
+    </div>
+    <!-- ▼▼▼ ЗАМЕНИТЕ КОНТАКТЫ НА СВОИ ▼▼▼ -->
+    <ul class="contact__list">
+      <li><a href="https://t.me/username"><span>Telegram</span><b>@username</b></a></li>
+      <li><a href="https://wa.me/79000000000"><span>WhatsApp</span><b>+7 900 000-00-00</b></a></li>
+      <li><a href="tel:+79000000000"><span>Телефон</span><b>+7 900 000-00-00</b></a></li>
+      <li><a href="mailto:mail@example.com"><span>Почта</span><b>mail@example.com</b></a></li>
+    </ul>
+    <!-- ▲▲▲ ЗАМЕНИТЕ КОНТАКТЫ НА СВОИ ▲▲▲ -->
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p>Сайты собраны руками: HTML, CSS, JavaScript. Без конструкторов и готовых шаблонов.</p>
+  <p>Краснодар, работаю удалённо по всей России · 2026</p>
+</footer>
+
+<!-- просмотр работы целиком -->
+<div class="viewer" id="viewer" hidden>
+  <div class="viewer__backdrop" data-close></div>
+  <div class="viewer__panel" role="dialog" aria-modal="true" aria-labelledby="viewer-name">
+    <div class="viewer__info">
+      <p class="viewer__label"><span id="viewer-no"></span> <span id="viewer-kind"></span></p>
+      <h2 class="viewer__name" id="viewer-name"></h2>
+      <p class="viewer__field" id="viewer-field"></p>
+      <p class="viewer__idea" id="viewer-idea"></p>
+      <p class="viewer__desc" id="viewer-desc"></p>
+      <ul class="viewer__bullets" id="viewer-bullets"></ul>
+      <ul class="viewer__tags" id="viewer-tags"></ul>
+      <a class="btn btn--solid viewer__live" id="viewer-live" href="#" target="_blank" rel="noopener">Открыть живой сайт</a>
+      <figure class="viewer__phone">
+        <img id="viewer-phone" alt="" width="390" height="844" loading="lazy">
+        <figcaption>Тот же сайт на телефоне</figcaption>
+      </figure>
+    </div>
+    <div class="viewer__page">
+      <img id="viewer-full" alt="" loading="lazy">
+    </div>
+    <button class="viewer__close" data-close aria-label="Закрыть">✕<span>Esc</span></button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
