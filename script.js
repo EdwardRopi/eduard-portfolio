@@ -354,6 +354,107 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+/* ── живой фон: краски и летящие метки ──────────────────── */
+
+const INKS = ['#1f2bff', '#e5462e', '#0fae9f', '#e0409b', '#f0a500', '#6b3be8'];
+
+function paintBackground() {
+  const canvas = document.getElementById('bg');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w = 0;
+  let h = 0;
+
+  // на телефоне красок и меток меньше — рисовать дешевле
+  const light = window.innerWidth < 760;
+  const inks = light ? INKS.slice(0, 4) : INKS;
+
+  // большие мягкие пятна краски: медленно расходятся и перекрываются
+  const blobs = inks.map((color, i) => ({
+    color,
+    x: 0.12 + (i % 3) * 0.38,
+    y: i < 3 ? 0.22 : 0.72,
+    drift: 0.10 + (i % 3) * 0.03,
+    speed: 0.018 + i * 0.004,
+    phase: i * 1.7,
+    size: 0.42 + (i % 2) * 0.16,
+  }));
+
+  // мелкие метки — как обрезки цветной бумаги в печатном цехе
+  const chips = Array.from({ length: light ? 10 : 22 }, (_, i) => ({
+    color: INKS[i % INKS.length],
+    x: Math.random(),
+    y: Math.random(),
+    size: 5 + Math.random() * 9,
+    speed: 0.006 + Math.random() * 0.012,
+    sway: 0.02 + Math.random() * 0.04,
+    phase: Math.random() * 6.28,
+    spin: (Math.random() - 0.5) * 0.5,
+  }));
+
+  function resize() {
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = w;
+    canvas.height = h;
+  }
+
+  function frame(seconds) {
+    ctx.clearRect(0, 0, w, h);
+    ctx.globalCompositeOperation = 'multiply';
+
+    const reach = Math.max(w, h);
+    blobs.forEach((b) => {
+      const x = (b.x + Math.sin(seconds * b.speed * 6.28 + b.phase) * b.drift) * w;
+      const y = (b.y + Math.cos(seconds * b.speed * 5.1 + b.phase) * b.drift * 0.8) * h;
+      const r = reach * b.size;
+      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+      g.addColorStop(0, b.color);
+      g.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.globalAlpha = 0.13;
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, 6.29);
+      ctx.fill();
+    });
+
+    chips.forEach((c) => {
+      // плывут вверх и по кругу возвращаются снизу
+      const y = ((c.y - seconds * c.speed) % 1 + 1) % 1;
+      const x = c.x + Math.sin(seconds * 0.35 + c.phase) * c.sway;
+      ctx.globalAlpha = 0.42;
+      ctx.fillStyle = c.color;
+      ctx.save();
+      ctx.translate(x * w, y * h);
+      ctx.rotate(seconds * c.spin + c.phase);
+      ctx.fillRect(-c.size / 2, -c.size / 2, c.size, c.size);
+      ctx.restore();
+    });
+
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  if (lessMotion.matches) {
+    frame(0);
+    return;
+  }
+
+  // 30 кадров в секунду достаточно: движение и так медленное
+  let last = 0;
+  (function tick(now) {
+    requestAnimationFrame(tick);
+    if (document.hidden || now - last < 33) return;
+    last = now;
+    frame(now / 1000);
+  })(0);
+}
+
+paintBackground();
+
 /* ── появление блоков при прокрутке ─────────────────────── */
 
 if (!lessMotion.matches && 'IntersectionObserver' in window) {
