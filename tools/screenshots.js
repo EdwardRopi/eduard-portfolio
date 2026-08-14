@@ -28,13 +28,14 @@ const url = /^https?:/.test(target)
   : 'file:///' + path.resolve(target).replace(/\\/g, '/');
 
 const MODES = {
-  hero: { width: 1440, height: 900, scale: 1, full: false, quality: 82 },
+  hero: { width: 1440, height: 900, scale: 1.5, full: false, quality: 84 },
   full: { width: 1440, height: 900, scale: 1, full: true, quality: 72 },
   phone: { width: 390, height: 844, scale: 2, full: false, quality: 82 },
 };
 
-// прокручиваем страницу до конца: иначе блоки с анимацией появления
-// останутся невидимыми и попадут в кадр пустыми
+// Проходим страницу до низа и возвращаемся наверх. Это нужно всем трём
+// кадрам: пока блоки с анимацией появления не «проявились», первый экран
+// попадает в снимок недособранным.
 async function scrollThrough(page) {
   await page.evaluate(async () => {
     const step = Math.round(window.innerHeight * 0.6);
@@ -65,8 +66,7 @@ async function scrollThrough(page) {
     const page = await ctx.newPage();
     await page.goto(url, { waitUntil: 'load', timeout: 60000 });
     await page.waitForTimeout(1800);
-    if (cfg.full) await scrollThrough(page);
-    else await page.waitForTimeout(1200);
+    await scrollThrough(page);
 
     const file = path.join(OUT, `${id}-${mode}.jpg`);
     await page.screenshot({ path: file, type: 'jpeg', quality: cfg.quality, fullPage: cfg.full });
