@@ -611,6 +611,84 @@ systemDark.addEventListener('change', () => {
 
 applyTheme(root.dataset.mode || 'auto');
 
+/* ── меню на узких экранах ──────────────────────────────── */
+
+/* Пункты берём из той же верхней навигации, что и на десктопе,
+   поэтому меню не может разойтись с ней по составу. */
+function buildMenu() {
+  const bar = document.querySelector('.bar');
+  const nav = bar && bar.querySelector('.bar__nav');
+  if (!nav) return;
+
+  const burger = document.createElement('button');
+  burger.className = 'burger';
+  burger.type = 'button';
+  burger.setAttribute('aria-expanded', 'false');
+  burger.setAttribute('aria-controls', 'menu');
+  burger.setAttribute('aria-label', 'Разделы сайта');
+  burger.innerHTML = '<span></span><span></span><span></span>';
+
+  const links = [...nav.querySelectorAll('a')].map((a, i) => {
+    const here = a.hasAttribute('aria-current') ? ' aria-current="page"' : '';
+    return `<a class="menu__link" href="${a.getAttribute('href')}"${here}>
+      <span class="menu__no">${String(i + 1).padStart(2, '0')}</span>
+      <span>${a.textContent}</span></a>`;
+  }).join('');
+
+  const panel = document.createElement('div');
+  panel.className = 'menu';
+  panel.id = 'menu';
+  panel.hidden = true;
+  panel.innerHTML = `
+    <div class="menu__top">
+      <span class="menu__label">Twelve Sites · разделы</span>
+      <button class="menu__close" type="button" aria-label="Закрыть">✕</button>
+    </div>
+    <nav class="menu__nav" aria-label="Разделы сайта">${links}</nav>
+    <div class="menu__foot">
+      <a class="btn btn--solid" href="contacts.html">Обсудить проект <span aria-hidden="true">→</span></a>
+      <a class="menu__contact" href="https://t.me/edward_Proishodit">@edward_Proishodit</a>
+      <a class="menu__contact" href="tel:+79933080951">+7 993 308-09-51</a>
+    </div>`;
+
+  bar.insertBefore(burger, bar.querySelector('.theme') || bar.lastElementChild);
+  document.body.append(panel);
+
+  let opener = null;
+
+  function openMenu() {
+    opener = document.activeElement;
+    panel.hidden = false;
+    document.body.classList.add('is-locked');
+    burger.setAttribute('aria-expanded', 'true');
+    panel.querySelector('.menu__close').focus();
+  }
+
+  function closeMenu() {
+    panel.hidden = true;
+    document.body.classList.remove('is-locked');
+    burger.setAttribute('aria-expanded', 'false');
+    if (opener) opener.focus();
+  }
+
+  burger.addEventListener('click', () => (panel.hidden ? openMenu() : closeMenu()));
+  panel.querySelector('.menu__close').addEventListener('click', closeMenu);
+  panel.querySelectorAll('.menu__link, .menu__foot a').forEach((a) => {
+    a.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !panel.hidden) closeMenu();
+  });
+
+  // вернулись на широкий экран с открытым меню — закрываем
+  window.matchMedia('(min-width: 1201px)').addEventListener('change', (e) => {
+    if (e.matches && !panel.hidden) closeMenu();
+  });
+}
+
+buildMenu();
+
 /* ── шкала прочитанного в верхней панели ────────────────── */
 
 const bar = document.querySelector('.bar');
