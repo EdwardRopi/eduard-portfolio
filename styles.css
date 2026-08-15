@@ -1793,6 +1793,65 @@ body::after {
   .viewer__phone { display: none; }
 }
 
+/* ── телефон: то же самое, но плотнее ───────────────────── */
+
+@media (max-width: 640px) {
+  /* разделы ближе друг к другу — иначе страница превращается в лестницу */
+  .services,
+  .prices,
+  .team,
+  .faq,
+  .works,
+  .claim,
+  .process,
+  .contact,
+  .cta { margin-top: 56px; }
+
+  .facts,
+  .ticker { margin-top: 40px; }
+
+  .page-head { padding-top: 34px; padding-bottom: 30px; }
+  .hero__text { padding: 34px var(--pad) 40px; }
+  .hero__lead { margin-top: 20px; padding-top: 18px; }
+  .hero__actions { margin-top: 22px; }
+
+  .claim,
+  .contact,
+  .cta { padding: 34px 20px 38px; }
+
+  .services__grid article,
+  .plan,
+  .mate,
+  .steps li { padding: 22px 20px 26px; }
+
+  .work__meta { padding: 16px 16px 20px; }
+  .grid { gap: 28px; }
+  .prices__grid,
+  .team__grid,
+  .more__grid { gap: 14px; }
+
+  .facts dt { font-size: 2.2rem; }
+  .facts dt::after { width: 32px; height: 4px; margin-top: 10px; }
+  .facts dl > div { padding: 16px 16px 18px 0; }
+  .facts dl > div + div { padding-left: 16px; }
+
+  .ticker { padding: 12px 0; }
+  .ticker__item { font-size: 1rem; gap: 16px; padding-right: 16px; }
+  .ticker__item::after { width: 8px; height: 8px; }
+
+  .faq summary { padding: 16px 0; font-size: 1rem; }
+  .faq details p { padding-bottom: 18px; }
+
+  .section-head { padding-bottom: 16px; }
+  .foot { padding: 20px var(--pad) 32px; }
+
+  /* главные кнопки на всю ширину — так экран выглядит собраннее */
+  .hero__actions .btn,
+  .cta__actions .btn,
+  .section-actions .btn,
+  .form button { width: 100%; justify-content: center; }
+}
+
 @media (max-width: 560px) {
   body { font-size: 16px; }
   .bar { gap: 8px; padding-left: 16px; padding-right: 16px; }
@@ -1802,7 +1861,9 @@ body::after {
   .theme__btn { padding: 7px 7px; font-size: 9px; letter-spacing: 0.06em; }
   .steps { grid-template-columns: 1fr; }
   .work__hint { display: none; }
-  .hero__proof { min-height: 300px; }
+  .hero__proof { min-height: 280px; }
+  .h2 { font-size: 1.9rem; }
+  .page-head h1 { font-size: 2.1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

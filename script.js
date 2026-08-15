@@ -655,16 +655,31 @@ function paintBackground() {
     pull: 0.4 + (i % 3) * 0.3,
   }));
 
-  // мелкие метки — как обрезки цветной бумаги в печатном цехе
-  const chips = Array.from({ length: small ? 10 : 22 }, (_, i) => ({
+  /* Крупная тонкая геометрия: кольца, рамки, дуги и приводные кресты —
+     то, что лежит на полях печатного листа. Двигаются от прокрутки:
+     у каждого объекта свой коэффициент, поэтому они идут с разной
+     скоростью и проходят мимо, пока читаешь страницу. */
+  const SHAPES = ['ring', 'frame', 'arc', 'ring', 'frame'];
+  const shapes = SHAPES.slice(0, small ? 3 : 5).map((kind, i) => ({
+    kind,
+    x: 0.14 + (i * 0.23) % 0.8,
+    y: (i * 0.37) % 1,
+    size: 120 + (i % 3) * 90,
+    parallax: 0.12 + (i % 4) * 0.09,
+    sway: 18 + (i % 3) * 14,
+    speed: 0.05 + i * 0.02,
+    spin: (i % 2 ? 1 : -1) * 0.004,
     ink: i % 6,
-    x: Math.random(),
-    y: Math.random(),
-    size: 5 + Math.random() * 9,
-    speed: 0.006 + Math.random() * 0.012,
-    sway: 0.02 + Math.random() * 0.04,
-    phase: Math.random() * 6.28,
-    spin: (Math.random() - 0.5) * 0.5,
+    tinted: i % 3 === 0,
+  }));
+
+  // приводные кресты — мелкая типографская метка на полях
+  const marks = Array.from({ length: small ? 3 : 6 }, (_, i) => ({
+    x: 0.08 + (i * 0.17) % 0.86,
+    y: (i * 0.29) % 1,
+    size: 9 + (i % 2) * 4,
+    parallax: 0.2 + (i % 3) * 0.14,
+    ink: (i + 2) % 6,
   }));
 
   // краски тянутся за курсором — еле заметно, но лист оживает
@@ -681,9 +696,16 @@ function paintBackground() {
     canvas.height = h;
   }
 
+  // объект уезжает вверх по мере прокрутки и возвращается снизу
+  function travel(base, parallax, scrolled) {
+    const track = h + 480;
+    return (((base * track - scrolled * parallax) % track) + track) % track - 240;
+  }
+
   function frame(seconds) {
     const night = root.dataset.theme === 'dark';
     const inks = night ? INKS.dark : INKS.light;
+    const scrolled = window.scrollY || 0;
 
     pointer.atX += (pointer.x - pointer.atX) * 0.05;
     pointer.atY += (pointer.y - pointer.atY) * 0.05;
@@ -695,33 +717,66 @@ function paintBackground() {
     const reach = Math.max(w, h);
     blobs.forEach((b) => {
       const x = (b.x + Math.sin(seconds * b.speed * 6.28 + b.phase) * b.drift) * w + pointer.atX * b.pull;
-      const y = (b.y + Math.cos(seconds * b.speed * 5.1 + b.phase) * b.drift * 0.8) * h + pointer.atY * b.pull;
+      const y = (b.y + Math.cos(seconds * b.speed * 5.1 + b.phase) * b.drift * 0.8) * h
+        + pointer.atY * b.pull - scrolled * 0.04;
       const r = reach * b.size;
       const g = ctx.createRadialGradient(x, y, 0, x, y, r);
       g.addColorStop(0, inks[b.ink]);
       g.addColorStop(1, night ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0)');
-      ctx.globalAlpha = night ? 0.16 : 0.13;
+      ctx.globalAlpha = night ? 0.14 : 0.11;
       ctx.fillStyle = g;
       ctx.beginPath();
       ctx.arc(x, y, r, 0, 6.29);
       ctx.fill();
     });
 
-    chips.forEach((c) => {
-      // плывут вверх и по кругу возвращаются снизу
-      const y = ((c.y - seconds * c.speed) % 1 + 1) % 1;
-      const x = c.x + Math.sin(seconds * 0.35 + c.phase) * c.sway;
-      ctx.globalAlpha = night ? 0.5 : 0.42;
-      ctx.fillStyle = inks[c.ink];
+    // геометрия рисуется поверх краски обычным режимом — тонкой линией
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.lineWidth = 1;
+
+    shapes.forEach((s) => {
+      const x = s.x * w + Math.sin(seconds * s.speed + s.ink) * s.sway;
+      const y = travel(s.y, s.parallax, scrolled);
+      ctx.globalAlpha = s.tinted ? (night ? 0.3 : 0.22) : (night ? 0.16 : 0.13);
+      ctx.strokeStyle = s.tinted ? inks[s.ink] : (night ? '#ffffff' : '#14161a');
       ctx.save();
-      ctx.translate(x * w, y * h);
-      ctx.rotate(seconds * c.spin + c.phase);
-      ctx.fillRect(-c.size / 2, -c.size / 2, c.size, c.size);
+      ctx.translate(x, y);
+      ctx.rotate(seconds * s.spin);
+
+      if (s.kind === 'ring') {
+        ctx.beginPath();
+        ctx.arc(0, 0, s.size, 0, 6.29);
+        ctx.stroke();
+      } else if (s.kind === 'frame') {
+        ctx.strokeRect(-s.size, -s.size * 0.7, s.size * 2, s.size * 1.4);
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, s.size, -0.4, 2.3);
+        ctx.stroke();
+      }
+      ctx.restore();
+    });
+
+    marks.forEach((m) => {
+      const x = m.x * w;
+      const y = travel(m.y, m.parallax, scrolled);
+      ctx.globalAlpha = night ? 0.34 : 0.28;
+      ctx.strokeStyle = inks[m.ink];
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.beginPath();
+      ctx.moveTo(-m.size, 0);
+      ctx.lineTo(m.size, 0);
+      ctx.moveTo(0, -m.size);
+      ctx.lineTo(0, m.size);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, 0, m.size * 0.45, 0, 6.29);
+      ctx.stroke();
       ctx.restore();
     });
 
     ctx.globalAlpha = 1;
-    ctx.globalCompositeOperation = 'source-over';
   }
 
   resize();
