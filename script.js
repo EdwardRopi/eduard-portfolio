@@ -746,7 +746,97 @@ function paintBackground() {
 
 paintBackground();
 
+/* ── бегущая строка направлений ─────────────────────────── */
+
+const DIRECTIONS = [
+  'Лендинги', 'Сайты-визитки', 'Интернет-магазины', 'Каталоги',
+  'Мини-приложения в Telegram', 'Редизайн', 'Вёрстка под телефон',
+];
+
+function fillTicker() {
+  const track = document.querySelector('.ticker__track');
+  if (!track) return;
+
+  // два одинаковых прохода: пока уезжает первый, второй занимает место
+  for (let pass = 0; pass < 2; pass += 1) {
+    DIRECTIONS.forEach((word, i) => {
+      const item = document.createElement('span');
+      item.className = 'ticker__item';
+      item.style.setProperty('--dot', `var(--c-${(i % 6) + 1})`);
+      item.textContent = word;
+      if (pass === 1) item.setAttribute('aria-hidden', 'true');
+      track.append(item);
+    });
+  }
+
+  if (lessMotion.matches) track.parentElement.classList.add('is-still');
+}
+
+fillTicker();
+
 /* ── появление блоков при прокрутке ─────────────────────── */
+
+/* Заголовки разделов выезжают из-под кромки: оборачиваем содержимое
+   в скрипте, чтобы не плодить одинаковую разметку в семи файлах. */
+function wrapHeadings() {
+  document.querySelectorAll('.h2').forEach((h) => {
+    if (h.querySelector('span > i')) return;
+    h.innerHTML = `<span><i>${h.innerHTML}</i></span>`;
+  });
+}
+
+/* Числа в фактах набегают до своего значения. Разбираем строку целиком,
+   поэтому одинаково работают «12», «2–14», «50/50» и «100%». */
+function countUp(el) {
+  const source = el.dataset.value || el.textContent;
+  el.dataset.value = source;
+  const numbers = source.match(/\d+/g);
+  if (!numbers) return;
+
+  const targets = numbers.map(Number);
+  const started = performance.now();
+  const duration = 900;
+
+  function step(now) {
+    const t = Math.min(1, (now - started) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    let i = 0;
+    el.textContent = source.replace(/\d+/g, () => {
+      const value = Math.round(targets[i] * eased);
+      i += 1;
+      return String(value);
+    });
+    if (t < 1) requestAnimationFrame(step);
+    else el.textContent = source;
+  }
+
+  requestAnimationFrame(step);
+}
+
+if (!lessMotion.matches && 'IntersectionObserver' in window) {
+  document.documentElement.classList.add('can-animate');
+  wrapHeadings();
+
+  const headings = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-in');
+      obs.unobserve(entry.target);
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.2 });
+
+  document.querySelectorAll('.h2').forEach((h) => headings.observe(h));
+
+  const counters = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      countUp(entry.target);
+      obs.unobserve(entry.target);
+    });
+  }, { threshold: 0.6 });
+
+  document.querySelectorAll('.facts dt').forEach((dt) => counters.observe(dt));
+}
 
 if (!lessMotion.matches && 'IntersectionObserver' in window) {
   const io = new IntersectionObserver((entries, obs) => {
