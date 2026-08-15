@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Команда — Twelve Sites</title>
+<meta name="description" content="Кто работает в студии Twelve Sites: небольшая команда без прослойки менеджеров — вы говорите напрямую с тем, кто делает вашу работу.">
+<meta name="theme-color" content="#e9e9e3">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="styles.css">
+<script>
+  (function () {
+    var mode = 'auto';
+    try { mode = localStorage.getItem('theme') || 'auto'; } catch (e) {}
+    var dark = mode === 'dark' ||
+      (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    document.documentElement.dataset.mode = mode;
+  })();
+</script>
+</head>
+<body>
+
+<canvas class="bg" id="bg" aria-hidden="true"></canvas>
+<a class="skip" href="#main">Перейти к содержанию</a>
+
+<header class="bar">
+  <a class="bar__me" href="index.html">
+    <span class="mark" aria-hidden="true">12</span>
+    <span class="bar__name">TWELVE SITES</span>
+    <span class="bar__role">веб-студия</span>
+  </a>
+  <nav class="bar__nav" aria-label="Разделы">
+    <a href="services.html">Услуги</a>
+    <a href="works.html">Работы</a>
+    <a href="prices.html">Цены</a>
+    <a href="team.html" aria-current="page">Команда</a>
+    <a href="contacts.html">Контакты</a>
+  </nav>
+  <div class="theme" role="group" aria-label="Оформление">
+    <button class="theme__btn" type="button" data-set="auto">Авто</button>
+    <button class="theme__btn" type="button" data-set="light">День</button>
+    <button class="theme__btn" type="button" data-set="dark">Ночь</button>
+  </div>
+  <a class="btn btn--solid bar__cta" href="contacts.html">Обсудить проект</a>
+  <span class="bar__ink" aria-hidden="true"></span>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <p class="eyebrow">Twelve Sites &nbsp;·&nbsp; команда</p>
+    <h1>Кто делает вашу работу</h1>
+    <p class="page-head__lead">
+      Небольшая студия без прослойки менеджеров: вы говорите напрямую
+      с тем, кто рисует и верстает ваш сайт. Задача не проходит через три
+      пересказа, поэтому и правки доходят с первого раза.
+    </p>
+  </section>
+
+  <section class="team">
+    <div class="team__grid" id="team-grid"></div>
+  </section>
+
+  <section class="services">
+    <div class="section-head">
+      <h2 class="h2">Как устроена работа</h2>
+      <p class="section-note">
+        Три правила, из-за которых с нами спокойно.
+      </p>
+    </div>
+    <div class="services__grid">
+      <article>
+        <h3>Один человек ведёт проект целиком</h3>
+        <p>Тот, кто придумал идею, тот же её и верстает. Ничего не теряется
+          при передаче между дизайнером и разработчиком.</p>
+      </article>
+      <article>
+        <h3>Вы видите работу на каждом шаге</h3>
+        <p>Сайт собирается на рабочей ссылке, а не в закрытом кабинете.
+          Можно зайти в любой момент и посмотреть, что уже готово.</p>
+      </article>
+      <article>
+        <h3>Узких специалистов зовём под задачу</h3>
+        <p>Копирайтер, фотограф, специалист по рекламе подключаются,
+          когда они действительно нужны. Вы платите за работу, а не за штат.</p>
+      </article>
+      <article>
+        <h3>Исходники остаются у вас</h3>
+        <p>После сдачи отдаём файлы и доступы. Не привязываем к себе
+          абонентской платой и не держим сайт в заложниках.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div>
+      <h2 class="h2">Хотите к нам в команду?</h2>
+      <p>Если вы верстальщик, дизайнер или копирайтер и вам близко,
+        как мы работаем, — напишите и покажите свои работы.</p>
+    </div>
+    <div class="cta__actions">
+      <a class="btn btn--solid" href="https://t.me/edward_Proishodit">Написать в Telegram <span aria-hidden="true">→</span></a>
+      <a class="btn" href="contacts.html">Другие контакты</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p>Twelve Sites — сайты собираем руками: HTML, CSS, JavaScript. Без конструкторов и готовых шаблонов.</p>
+  <p>Плохотников Эдуард Александрович · Краснодар, работаем по всей России · 2026 · <a href="privacy.html">Политика обработки данных</a></p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

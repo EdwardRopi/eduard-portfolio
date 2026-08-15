@@ -30,34 +30,32 @@
 </head>
 <body>
 
-<!-- живой фон: поля красок и летящие метки, рисуются в script.js -->
 <canvas class="bg" id="bg" aria-hidden="true"></canvas>
-
-<a class="skip" href="#works">Перейти к работам</a>
+<a class="skip" href="#main">Перейти к содержанию</a>
 
 <header class="bar">
-  <a class="bar__me" href="#top">
+  <a class="bar__me" href="index.html">
     <span class="mark" aria-hidden="true">12</span>
     <span class="bar__name">TWELVE SITES</span>
     <span class="bar__role">веб-студия</span>
   </a>
   <nav class="bar__nav" aria-label="Разделы">
-    <a href="#services">Услуги</a>
-    <a href="#works">Работы</a>
-    <a href="#prices">Цены</a>
-    <a href="#team">Команда</a>
-    <a href="#contact">Контакты</a>
+    <a href="services.html">Услуги</a>
+    <a href="works.html">Работы</a>
+    <a href="prices.html">Цены</a>
+    <a href="team.html">Команда</a>
+    <a href="contacts.html">Контакты</a>
   </nav>
   <div class="theme" role="group" aria-label="Оформление">
     <button class="theme__btn" type="button" data-set="auto">Авто</button>
     <button class="theme__btn" type="button" data-set="light">День</button>
     <button class="theme__btn" type="button" data-set="dark">Ночь</button>
   </div>
-  <a class="btn btn--solid bar__cta" href="#contact">Обсудить проект</a>
+  <a class="btn btn--solid bar__cta" href="contacts.html">Обсудить проект</a>
   <span class="bar__ink" aria-hidden="true"></span>
 </header>
 
-<main id="top">
+<main id="main">
 
   <section class="hero">
     <div class="hero__text">
@@ -73,8 +71,8 @@
         среди них нет двух одинаковых.
       </p>
       <div class="hero__actions">
-        <a class="btn btn--solid" href="#contact">Обсудить проект <span aria-hidden="true">→</span></a>
-        <a class="btn" href="#prices">Узнать стоимость <span aria-hidden="true">→</span></a>
+        <a class="btn btn--solid" href="contacts.html">Обсудить проект <span aria-hidden="true">→</span></a>
+        <a class="btn" href="prices.html">Узнать стоимость <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -93,7 +91,7 @@
     </dl>
   </section>
 
-  <section class="services" id="services">
+  <section class="services">
     <div class="section-head">
       <h2 class="h2">Что делаем</h2>
       <p class="section-note">
@@ -104,63 +102,40 @@
     <div class="services__grid">
       <article>
         <h3>Сайт-визитка и лендинг</h3>
-        <p>Одна страница, которая отвечает на вопросы клиента и приводит заявку.
-          Цены, услуги, мастера, форма записи — всё на виду.</p>
-        <ul>
-          <li>Визуальная идея под нишу</li>
-          <li>Заявки на почту и в Telegram</li>
-          <li>Отдельная вёрстка под телефон</li>
-        </ul>
+        <p>Одна страница, которая отвечает на вопросы клиента и приводит заявку.</p>
       </article>
       <article>
         <h3>Каталог и интернет-магазин</h3>
-        <p>Товары с фильтрами, карточка товара, корзина и заявка.
-          Прайсы поставщиков импортируются, каталог правится одним файлом.</p>
-        <ul>
-          <li>До нескольких тысяч позиций</li>
-          <li>Подбор по параметрам</li>
-          <li>Без тяжёлой админки и абонентской платы</li>
-        </ul>
+        <p>Товары с фильтрами, карточка товара и заявка. Прайсы поставщиков импортируются.</p>
       </article>
       <article>
         <h3>Мини-приложения в Telegram</h3>
-        <p>Трекеры, записи, подписки и оплата прямо внутри мессенджера.
-          Пользователю не нужно ничего устанавливать.</p>
-        <ul>
-          <li>Интерфейс, база данных, уведомления</li>
-          <li>Приём платежей</li>
-          <li>Бот и мини-приложение в одной связке</li>
-        </ul>
+        <p>Трекеры, записи, подписки и оплата прямо внутри мессенджера.</p>
       </article>
       <article>
         <h3>Редизайн и доработка</h3>
-        <p>Берём то, что уже есть, и приводим в порядок: вид, скорость,
-          понятность, заявки. Содержимое переносим сами.</p>
-        <ul>
-          <li>Сохраняем позиции и адреса страниц</li>
-          <li>Чиним мобильную версию</li>
-          <li>Ускоряем загрузку</li>
-        </ul>
+        <p>Берём то, что уже есть, и приводим в порядок: вид, скорость, заявки.</p>
       </article>
+    </div>
+    <div class="section-actions">
+      <a class="btn" href="services.html">Подробнее об услугах <span aria-hidden="true">→</span></a>
     </div>
   </section>
 
-  <section class="works" id="works">
+  <section class="works">
     <div class="works__head">
       <h2 class="h2">Работы</h2>
       <p class="works__note">
         Каждая карточка листает сайт целиком — наведите курсор.
         Нажмите, чтобы открыть страницу в полный размер.
       </p>
-      <div class="filters" role="group" aria-label="Фильтр работ">
-        <button class="filter is-on" data-kind="all">Все</button>
-        <button class="filter" data-kind="landing">Лендинги</button>
-        <button class="filter" data-kind="card">Сайты-визитки</button>
-        <button class="filter" data-kind="shop">Каталоги и магазины</button>
-      </div>
     </div>
 
-    <div class="grid" id="grid"></div>
+    <div class="grid" id="grid" data-limit="4"></div>
+
+    <div class="section-actions">
+      <a class="btn btn--solid" href="works.html">Все двенадцать работ <span aria-hidden="true">→</span></a>
+    </div>
 
     <noscript>
       <p class="noscript">
@@ -179,135 +154,30 @@
     </div>
   </section>
 
-  <section class="prices" id="prices">
+  <section class="prices">
     <div class="section-head">
       <h2 class="h2">Сколько стоит</h2>
       <p class="section-note">
-        Цена известна до начала работы и не растёт по ходу. Оплата 50/50:
-        половина вперёд, половина при сдаче.
+        Цена известна до начала работы и не растёт по ходу.
+        Оплата 50/50: половина вперёд, половина при сдаче.
       </p>
     </div>
     <div class="prices__grid" id="prices-grid"></div>
-    <p class="prices__note">
-      Отдельно оплачиваются домен и хостинг — 2–4 тысячи рублей в год
-      напрямую регистратору, мимо нас. Фотосъёмка и рекламный бюджет —
-      тоже отдельно; если они не нужны, так и скажем.
-    </p>
-  </section>
-
-  <section class="process" id="process">
-    <h2 class="h2">Как работаем</h2>
-    <ol class="steps">
-      <li>
-        <h3>Разговор и бриф</h3>
-        <p>Спрашиваем про бизнес, клиентов и то, что должно происходить после
-          захода на сайт. Присылаем короткий бриф — на него уходит 15 минут.</p>
-      </li>
-      <li>
-        <h3>Идея и первый экран</h3>
-        <p>Придумываем, чем этот сайт будет отличаться от соседей по нише,
-          и собираем первый экран сразу в браузере — не картинкой, а живой страницей.</p>
-      </li>
-      <li>
-        <h3>Сборка и правки</h3>
-        <p>Верстаем остальные разделы, наполняем вашими текстами и фотографиями.
-          Правки вносим по ходу, на рабочей ссылке — вы видите каждый шаг.</p>
-      </li>
-      <li>
-        <h3>Публикация и передача</h3>
-        <p>Подключаем домен, настраиваем формы заявок, проверяем телефоны
-          и скорость. Отдаём исходники и показываем, как менять тексты самому.</p>
-      </li>
-    </ol>
-  </section>
-
-  <section class="team" id="team">
-    <div class="section-head">
-      <h2 class="h2">Команда</h2>
-      <p class="section-note">
-        Небольшая студия без прослойки менеджеров: вы говорите напрямую с тем,
-        кто делает вашу работу.
-      </p>
-    </div>
-    <div class="team__grid" id="team-grid"></div>
-  </section>
-
-  <section class="faq" id="faq">
-    <div class="section-head">
-      <h2 class="h2">Вопросы, которые задают чаще всего</h2>
-    </div>
-    <div class="faq__list">
-      <details>
-        <summary>Сколько занимает работа?</summary>
-        <p>Визитка — 2–3 дня, лендинг — 5–7 дней, многостраничный сайт под
-          рекламу — 10–14 дней. Отсчёт идёт с того момента, как получены тексты
-          и фотографии; если их нет, поможем собрать.</p>
-      </details>
-      <details>
-        <summary>А если мне не понравится?</summary>
-        <p>Первый экран показываем в самом начале — на нём уже видно, каким
-          будет сайт. Если направление не нравится, меняем его до сборки
-          остального. В каждый пакет входят круги правок, они прописаны в составе.</p>
-      </details>
-      <details>
-        <summary>Нужен ли мне домен и хостинг?</summary>
-        <p>Да, это адрес сайта и место, где он лежит: 2–4 тысячи рублей в год.
-          Платите напрямую регистратору, чтобы всё оставалось на ваше имя.
-          Настройку берём на себя.</p>
-      </details>
-      <details>
-        <summary>Куда будут приходить заявки?</summary>
-        <p>На почту, в Telegram или в Google Таблицу — как удобнее.
-          Проверяем на реальной отправке при сдаче и показываем, как это работает.</p>
-      </details>
-      <details>
-        <summary>Смогу я сам менять тексты?</summary>
-        <p>Да. Отдаём исходники и показываем, где что лежит. Для каталогов
-          делаем отдельный файл с товарами — он правится без программиста.</p>
-      </details>
-      <details>
-        <summary>Работаете по договору?</summary>
-        <p>Да, работаем по договору и выдаём чек. Для небольших пакетов
-          достаточно счёта и переписки — как вам удобнее.</p>
-      </details>
+    <div class="section-actions">
+      <a class="btn" href="prices.html">Что входит в каждый пакет <span aria-hidden="true">→</span></a>
     </div>
   </section>
 
-  <section class="contact" id="contact">
-    <div class="contact__text">
+  <section class="cta">
+    <div>
       <h2 class="h2">Расскажите про задачу</h2>
       <p>Напишите пару строк о бизнесе и о том, какой сайт нужен. В ответ
-        пришлём сроки, цену и пару примеров из вашей ниши. Ни к чему не обязывает.</p>
-
-      <form class="form" id="form" novalidate>
-        <label class="form__row">
-          <span>Как к вам обращаться</span>
-          <input type="text" name="name" autocomplete="name" required>
-        </label>
-        <label class="form__row">
-          <span>Телефон, Telegram или почта</span>
-          <input type="text" name="contact" autocomplete="tel" required>
-        </label>
-        <label class="form__row">
-          <span>Что за бизнес и какой нужен сайт</span>
-          <textarea name="task" rows="3"></textarea>
-        </label>
-        <label class="form__check">
-          <input type="checkbox" name="agree" required>
-          <span>Согласен на обработку персональных данных согласно
-            <a href="privacy.html">политике</a></span>
-        </label>
-        <button class="btn btn--solid" type="submit">Отправить заявку <span aria-hidden="true">→</span></button>
-        <p class="form__note" id="form-note" role="status"></p>
-      </form>
+        пришлём сроки, цену и пару примеров из вашей ниши.</p>
     </div>
-
-    <ul class="contact__list">
-      <li><a href="https://t.me/edward_Proishodit"><span>Telegram</span><b>@edward_Proishodit</b></a></li>
-      <li><a href="tel:+79933080951"><span>Телефон</span><b>+7 993 308-09-51</b></a></li>
-      <li><a href="https://wa.me/79933080951"><span>WhatsApp</span><b>+7 993 308-09-51</b></a></li>
-      <li><a href="mailto:plokhotnikov02@inbox.ru"><span>Почта</span><b>plokhotnikov02@inbox.ru</b></a></li>
-    </ul>
+    <div class="cta__actions">
+      <a class="btn btn--solid" href="contacts.html">Оставить заявку <span aria-hidden="true">→</span></a>
+      <a class="btn" href="https://t.me/edward_Proishodit">Написать в Telegram</a>
+    </div>
   </section>
 
 </main>

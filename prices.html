@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Цены — Twelve Sites</title>
+<meta name="description" content="Сколько стоит сайт в студии Twelve Sites: визитка 7 000 ₽, лендинг 13 000 ₽, сайт под рекламу 20 000 ₽. Что входит в каждый пакет и что оплачивается отдельно.">
+<meta name="theme-color" content="#e9e9e3">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="styles.css">
+<script>
+  (function () {
+    var mode = 'auto';
+    try { mode = localStorage.getItem('theme') || 'auto'; } catch (e) {}
+    var dark = mode === 'dark' ||
+      (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    document.documentElement.dataset.mode = mode;
+  })();
+</script>
+</head>
+<body>
+
+<canvas class="bg" id="bg" aria-hidden="true"></canvas>
+<a class="skip" href="#main">Перейти к содержанию</a>
+
+<header class="bar">
+  <a class="bar__me" href="index.html">
+    <span class="mark" aria-hidden="true">12</span>
+    <span class="bar__name">TWELVE SITES</span>
+    <span class="bar__role">веб-студия</span>
+  </a>
+  <nav class="bar__nav" aria-label="Разделы">
+    <a href="services.html">Услуги</a>
+    <a href="works.html">Работы</a>
+    <a href="prices.html" aria-current="page">Цены</a>
+    <a href="team.html">Команда</a>
+    <a href="contacts.html">Контакты</a>
+  </nav>
+  <div class="theme" role="group" aria-label="Оформление">
+    <button class="theme__btn" type="button" data-set="auto">Авто</button>
+    <button class="theme__btn" type="button" data-set="light">День</button>
+    <button class="theme__btn" type="button" data-set="dark">Ночь</button>
+  </div>
+  <a class="btn btn--solid bar__cta" href="contacts.html">Обсудить проект</a>
+  <span class="bar__ink" aria-hidden="true"></span>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <p class="eyebrow">Twelve Sites &nbsp;·&nbsp; цены</p>
+    <h1>Сколько стоит сайт</h1>
+    <p class="page-head__lead">
+      Цена известна до начала работы и не растёт по ходу. Оплата 50/50:
+      половина вперёд, половина при сдаче. «Визитку» можно оплатить
+      по факту — так спокойнее, если работаем впервые.
+    </p>
+  </section>
+
+  <section class="prices">
+    <div class="prices__grid" id="prices-grid"></div>
+    <p class="prices__note">
+      Отдельно оплачиваются домен и хостинг — 2–4 тысячи рублей в год
+      напрямую регистратору, мимо нас, чтобы всё оставалось на ваше имя.
+      Фотосъёмка и рекламный бюджет — тоже отдельно; если они не нужны,
+      так и скажем.
+    </p>
+  </section>
+
+  <section class="faq">
+    <div class="section-head">
+      <h2 class="h2">Вопросы, которые задают чаще всего</h2>
+      <p class="section-note">
+        Если вашего вопроса тут нет — напишите, ответим честно.
+      </p>
+    </div>
+    <div class="faq__list">
+      <details>
+        <summary>Сколько занимает работа?</summary>
+        <p>Визитка — 2–3 дня, лендинг — 5–7 дней, многостраничный сайт под
+          рекламу — 10–14 дней. Отсчёт идёт с того момента, как получены тексты
+          и фотографии; если их нет, поможем собрать.</p>
+      </details>
+      <details>
+        <summary>А если мне не понравится?</summary>
+        <p>Первый экран показываем в самом начале — на нём уже видно, каким
+          будет сайт. Если направление не нравится, меняем его до сборки
+          остального. В каждый пакет входят круги правок, они прописаны в составе.</p>
+      </details>
+      <details>
+        <summary>Нужен ли мне домен и хостинг?</summary>
+        <p>Да, это адрес сайта и место, где он лежит: 2–4 тысячи рублей в год.
+          Платите напрямую регистратору, чтобы всё оставалось на ваше имя.
+          Настройку берём на себя.</p>
+      </details>
+      <details>
+        <summary>Куда будут приходить заявки?</summary>
+        <p>На почту, в Telegram или в Google Таблицу — как удобнее.
+          Проверяем на реальной отправке при сдаче и показываем, как это работает.</p>
+      </details>
+      <details>
+        <summary>Смогу я сам менять тексты?</summary>
+        <p>Да. Отдаём исходники и показываем, где что лежит. Для каталогов
+          делаем отдельный файл с товарами — он правится без программиста.</p>
+      </details>
+      <details>
+        <summary>Что если нужно доработать сайт через полгода?</summary>
+        <p>Возвращайтесь — доработки считаем по часам и заранее говорим,
+          сколько выйдет. У пакета «Сайт под рекламу» первый месяц поддержки
+          уже входит в стоимость.</p>
+      </details>
+      <details>
+        <summary>Работаете по договору?</summary>
+        <p>Да, работаем по договору и выдаём чек. Для небольших пакетов
+          достаточно счёта и переписки — как вам удобнее.</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div>
+      <h2 class="h2">Посчитаем вашу задачу</h2>
+      <p>Опишите бизнес и что нужно — назовём точную цену и срок
+        до начала работы, без «от» и «примерно».</p>
+    </div>
+    <div class="cta__actions">
+      <a class="btn btn--solid" href="contacts.html">Оставить заявку <span aria-hidden="true">→</span></a>
+      <a class="btn" href="tel:+79933080951">+7 993 308-09-51</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p>Twelve Sites — сайты собираем руками: HTML, CSS, JavaScript. Без конструкторов и готовых шаблонов.</p>
+  <p>Плохотников Эдуард Александрович · Краснодар, работаем по всей России · 2026 · <a href="privacy.html">Политика обработки данных</a></p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

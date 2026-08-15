@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Услуги — Twelve Sites</title>
+<meta name="description" content="Что делает студия Twelve Sites: сайты-визитки и лендинги, каталоги и интернет-магазины, мини-приложения в Telegram, редизайн существующих сайтов.">
+<meta name="theme-color" content="#e9e9e3">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="styles.css">
+<script>
+  (function () {
+    var mode = 'auto';
+    try { mode = localStorage.getItem('theme') || 'auto'; } catch (e) {}
+    var dark = mode === 'dark' ||
+      (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    document.documentElement.dataset.mode = mode;
+  })();
+</script>
+</head>
+<body>
+
+<canvas class="bg" id="bg" aria-hidden="true"></canvas>
+<a class="skip" href="#main">Перейти к содержанию</a>
+
+<header class="bar">
+  <a class="bar__me" href="index.html">
+    <span class="mark" aria-hidden="true">12</span>
+    <span class="bar__name">TWELVE SITES</span>
+    <span class="bar__role">веб-студия</span>
+  </a>
+  <nav class="bar__nav" aria-label="Разделы">
+    <a href="services.html" aria-current="page">Услуги</a>
+    <a href="works.html">Работы</a>
+    <a href="prices.html">Цены</a>
+    <a href="team.html">Команда</a>
+    <a href="contacts.html">Контакты</a>
+  </nav>
+  <div class="theme" role="group" aria-label="Оформление">
+    <button class="theme__btn" type="button" data-set="auto">Авто</button>
+    <button class="theme__btn" type="button" data-set="light">День</button>
+    <button class="theme__btn" type="button" data-set="dark">Ночь</button>
+  </div>
+  <a class="btn btn--solid bar__cta" href="contacts.html">Обсудить проект</a>
+  <span class="bar__ink" aria-hidden="true"></span>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <p class="eyebrow">Twelve Sites &nbsp;·&nbsp; услуги</p>
+    <h1>Что делаем</h1>
+    <p class="page-head__lead">
+      Берём проект целиком: идея, дизайн, вёрстка, тексты, публикация
+      и передача исходников. Один исполнитель ведёт вас от первого разговора
+      до работающего адреса — без агентской надстройки и конструкторов.
+    </p>
+  </section>
+
+  <section class="services">
+    <div class="services__grid">
+      <article>
+        <h3>Сайт-визитка и лендинг</h3>
+        <p>Одна страница, которая отвечает на вопросы клиента и приводит заявку.
+          Цены, услуги, мастера, форма записи — всё на виду, без лишних переходов.</p>
+        <ul>
+          <li>Визуальная идея под вашу нишу</li>
+          <li>Тексты пишем сами, если их нет</li>
+          <li>Заявки на почту, в Telegram или в таблицу</li>
+          <li>Отдельная вёрстка под телефон</li>
+          <li>Яндекс.Метрика с целями</li>
+        </ul>
+      </article>
+      <article>
+        <h3>Каталог и интернет-магазин</h3>
+        <p>Товары с фильтрами, карточка товара, корзина и заявка. Прайсы
+          поставщиков импортируются, каталог правится одним файлом.</p>
+        <ul>
+          <li>До нескольких тысяч позиций</li>
+          <li>Подбор по параметрам и размерам</li>
+          <li>Импорт прайсов из Excel</li>
+          <li>Без тяжёлой админки и абонентской платы</li>
+        </ul>
+      </article>
+      <article>
+        <h3>Мини-приложения в Telegram</h3>
+        <p>Трекеры, записи, подписки и оплата прямо внутри мессенджера.
+          Пользователю не нужно ничего устанавливать и регистрироваться.</p>
+        <ul>
+          <li>Интерфейс, база данных, уведомления</li>
+          <li>Приём платежей</li>
+          <li>Бот и мини-приложение в одной связке</li>
+          <li>Хостинг и обновления берём на себя</li>
+        </ul>
+      </article>
+      <article>
+        <h3>Редизайн и доработка</h3>
+        <p>Берём то, что уже есть, и приводим в порядок: вид, скорость,
+          понятность, заявки. Содержимое переносим сами.</p>
+        <ul>
+          <li>Сохраняем позиции и адреса страниц</li>
+          <li>Чиним мобильную версию</li>
+          <li>Ускоряем загрузку</li>
+          <li>Подключаем формы и аналитику</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="process">
+    <h2 class="h2">Как работаем</h2>
+    <ol class="steps">
+      <li>
+        <h3>Разговор и бриф</h3>
+        <p>Спрашиваем про бизнес, клиентов и то, что должно происходить после
+          захода на сайт. Присылаем короткий бриф — на него уходит 15 минут.</p>
+      </li>
+      <li>
+        <h3>Идея и первый экран</h3>
+        <p>Придумываем, чем этот сайт будет отличаться от соседей по нише,
+          и собираем первый экран сразу в браузере — не картинкой, а живой страницей.</p>
+      </li>
+      <li>
+        <h3>Сборка и правки</h3>
+        <p>Верстаем остальные разделы, наполняем вашими текстами и фотографиями.
+          Правки вносим по ходу, на рабочей ссылке — вы видите каждый шаг.</p>
+      </li>
+      <li>
+        <h3>Публикация и передача</h3>
+        <p>Подключаем домен, настраиваем формы заявок, проверяем телефоны
+          и скорость. Отдаём исходники и показываем, как менять тексты самому.</p>
+      </li>
+    </ol>
+    <div class="section-actions">
+      <a class="btn" href="works.html">Посмотреть работы <span aria-hidden="true">→</span></a>
+      <a class="btn" href="prices.html">Цены и сроки <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div>
+      <h2 class="h2">Не нашли свою задачу?</h2>
+      <p>Опишите её в двух строках — скажем честно, беремся или нет,
+        и сколько это будет стоить.</p>
+    </div>
+    <div class="cta__actions">
+      <a class="btn btn--solid" href="contacts.html">Оставить заявку <span aria-hidden="true">→</span></a>
+      <a class="btn" href="https://t.me/edward_Proishodit">Написать в Telegram</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p>Twelve Sites — сайты собираем руками: HTML, CSS, JavaScript. Без конструкторов и готовых шаблонов.</p>
+  <p>Плохотников Эдуард Александрович · Краснодар, работаем по всей России · 2026 · <a href="privacy.html">Политика обработки данных</a></p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

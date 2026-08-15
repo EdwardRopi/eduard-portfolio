@@ -222,11 +222,16 @@ function prepareScroll(frame, work) {
   frame.addEventListener('focus', load);
 }
 
+/* На главной сетка урезана атрибутом data-limit, на странице работ
+   показываются все двенадцать. */
 function render(kind) {
+  if (!grid) return;
+  const limit = Number(grid.dataset.limit) || WORKS.length;
   grid.textContent = '';
   let shown = 0;
   WORKS.forEach((work, i) => {
     if (kind !== 'all' && work.kind !== kind) return;
+    if (shown >= limit) return;
     const card = cardFor(work, i);
     // порядковый номер в показанной сетке — по нему идёт волна появления
     card.style.setProperty('--i', Math.min(shown, 5));
@@ -454,7 +459,7 @@ if (form) {
 
 const swatches = document.getElementById('swatches');
 
-WORKS.forEach((work, i) => {
+if (swatches) WORKS.forEach((work, i) => {
   const b = document.createElement('button');
   b.type = 'button';
   b.className = 'swatch';
@@ -468,7 +473,7 @@ WORKS.forEach((work, i) => {
 /* ── просмотр работы целиком ────────────────────────────── */
 
 const viewer = document.getElementById('viewer');
-const parts = {
+const parts = !viewer ? null : {
   no: document.getElementById('viewer-no'),
   kind: document.getElementById('viewer-kind'),
   name: document.getElementById('viewer-name'),
@@ -485,6 +490,7 @@ const parts = {
 let lastFocused = null;
 
 function openViewer(work, i) {
+  if (!viewer) return;
   lastFocused = document.activeElement;
   viewer.style.setProperty('--accent', work.accent);
   parts.no.textContent = `кадр ${num(i)}`;
@@ -516,10 +522,12 @@ function closeViewer() {
   if (lastFocused) lastFocused.focus();
 }
 
-viewer.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeViewer));
+if (viewer) {
+  viewer.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeViewer));
+}
 
 document.addEventListener('keydown', (e) => {
-  if (viewer.hidden) return;
+  if (!viewer || viewer.hidden) return;
   if (e.key === 'Escape') closeViewer();
   if (e.key !== 'Tab') return;
 
@@ -759,10 +767,12 @@ if (!lessMotion.matches && 'IntersectionObserver' in window) {
     });
 
   // карточки перерисовываются фильтром — новые тоже показываем
-  new MutationObserver(() => {
-    grid.querySelectorAll('.work:not(.reveal)').forEach((el) => {
-      el.classList.add('reveal');
-      io.observe(el);
-    });
-  }).observe(grid, { childList: true });
+  if (grid) {
+    new MutationObserver(() => {
+      grid.querySelectorAll('.work:not(.reveal)').forEach((el) => {
+        el.classList.add('reveal');
+        io.observe(el);
+      });
+    }).observe(grid, { childList: true });
+  }
 }

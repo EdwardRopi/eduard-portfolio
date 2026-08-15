@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Контакты — Twelve Sites</title>
+<meta name="description" content="Связаться со студией Twelve Sites: Telegram, телефон, WhatsApp, почта и форма заявки. Краснодар, работаем по всей России.">
+<meta name="theme-color" content="#e9e9e3">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="styles.css">
+<script>
+  (function () {
+    var mode = 'auto';
+    try { mode = localStorage.getItem('theme') || 'auto'; } catch (e) {}
+    var dark = mode === 'dark' ||
+      (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    document.documentElement.dataset.mode = mode;
+  })();
+</script>
+</head>
+<body>
+
+<canvas class="bg" id="bg" aria-hidden="true"></canvas>
+<a class="skip" href="#main">Перейти к содержанию</a>
+
+<header class="bar">
+  <a class="bar__me" href="index.html">
+    <span class="mark" aria-hidden="true">12</span>
+    <span class="bar__name">TWELVE SITES</span>
+    <span class="bar__role">веб-студия</span>
+  </a>
+  <nav class="bar__nav" aria-label="Разделы">
+    <a href="services.html">Услуги</a>
+    <a href="works.html">Работы</a>
+    <a href="prices.html">Цены</a>
+    <a href="team.html">Команда</a>
+    <a href="contacts.html" aria-current="page">Контакты</a>
+  </nav>
+  <div class="theme" role="group" aria-label="Оформление">
+    <button class="theme__btn" type="button" data-set="auto">Авто</button>
+    <button class="theme__btn" type="button" data-set="light">День</button>
+    <button class="theme__btn" type="button" data-set="dark">Ночь</button>
+  </div>
+  <a class="btn btn--solid bar__cta" href="#form">Заполнить заявку</a>
+  <span class="bar__ink" aria-hidden="true"></span>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <p class="eyebrow">Twelve Sites &nbsp;·&nbsp; контакты</p>
+    <h1>Расскажите про задачу</h1>
+    <p class="page-head__lead">
+      Напишите пару строк о бизнесе и о том, какой сайт нужен. В ответ
+      пришлём сроки, цену и пару примеров из вашей ниши. Отвечаем в тот же
+      день, обычно в течение пары часов.
+    </p>
+  </section>
+
+  <section class="contact">
+    <div class="contact__text">
+      <h2 class="h2">Форма заявки</h2>
+      <p>Заполните три поля — этого хватит, чтобы назвать цену и срок.</p>
+
+      <form class="form" id="form" novalidate>
+        <label class="form__row">
+          <span>Как к вам обращаться</span>
+          <input type="text" name="name" autocomplete="name" required>
+        </label>
+        <label class="form__row">
+          <span>Телефон, Telegram или почта</span>
+          <input type="text" name="contact" autocomplete="tel" required>
+        </label>
+        <label class="form__row">
+          <span>Что за бизнес и какой нужен сайт</span>
+          <textarea name="task" rows="3"></textarea>
+        </label>
+        <label class="form__check">
+          <input type="checkbox" name="agree" required>
+          <span>Согласен на обработку персональных данных согласно
+            <a href="privacy.html">политике</a></span>
+        </label>
+        <button class="btn btn--solid" type="submit">Отправить заявку <span aria-hidden="true">→</span></button>
+        <p class="form__note" id="form-note" role="status"></p>
+      </form>
+    </div>
+
+    <div>
+      <h2 class="h2">Прямая связь</h2>
+      <ul class="contact__list">
+        <li><a href="https://t.me/edward_Proishodit"><span>Telegram</span><b>@edward_Proishodit</b></a></li>
+        <li><a href="tel:+79933080951"><span>Телефон</span><b>+7 993 308-09-51</b></a></li>
+        <li><a href="https://wa.me/79933080951"><span>WhatsApp</span><b>+7 993 308-09-51</b></a></li>
+        <li><a href="mailto:plokhotnikov02@inbox.ru"><span>Почта</span><b>plokhotnikov02@inbox.ru</b></a></li>
+      </ul>
+      <p class="contact__where">
+        Краснодар. Работаем удалённо по всей России: созвон, переписка
+        и рабочая ссылка на сайт заменяют встречи в офисе.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p>Twelve Sites — сайты собираем руками: HTML, CSS, JavaScript. Без конструкторов и готовых шаблонов.</p>
+  <p>Плохотников Эдуард Александрович · Краснодар, работаем по всей России · 2026 · <a href="privacy.html">Политика обработки данных</a></p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

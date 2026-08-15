@@ -291,6 +291,11 @@ body::after {
 
 .bar__nav a:hover { border-bottom-color: var(--signal); color: var(--signal); }
 
+.bar__nav a[aria-current='page'] {
+  border-bottom-color: var(--ink);
+  font-weight: 500;
+}
+
 /* переключатель темы */
 .theme {
   display: flex;
@@ -476,6 +481,77 @@ body::after {
   flex-wrap: wrap;
   gap: 12px;
   margin-top: clamp(24px, 3vw, 34px);
+}
+
+/* ── шапка внутренней страницы ──────────────────────────── */
+
+.page-head {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 84px) var(--pad) clamp(28px, 3vw, 40px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.page-head h1 {
+  margin-top: clamp(16px, 2vw, 24px);
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 0.98;
+}
+
+.page-head__lead {
+  margin-top: clamp(18px, 2vw, 26px);
+  max-width: 60ch;
+  color: var(--ink-2);
+  font-size: 16px;
+}
+
+/* сразу после шапки страницы раздел начинается ближе */
+.page-head + section { margin-top: clamp(36px, 5vw, 64px); }
+
+/* ── строка с кнопкой под разделом ──────────────────────── */
+
+.section-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: clamp(28px, 3vw, 40px);
+}
+
+/* ── блок «напишите нам» перед подвалом ─────────────────── */
+
+.cta {
+  position: relative;
+  max-width: var(--max);
+  margin: clamp(80px, 11vw, 140px) auto 0;
+  padding: clamp(44px, 6vw, 72px) clamp(28px, 4vw, 56px);
+  background: var(--cream);
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: end;
+}
+
+.cta::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 10px;
+  background: var(--strip);
+}
+
+.cta p {
+  margin-top: 16px;
+  max-width: 46ch;
+  color: var(--ink-2);
+}
+
+.cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
 }
 
 /* ── факты ──────────────────────────────────────────────── */
@@ -1281,6 +1357,13 @@ body::after {
 
 .contact__list a:hover span { color: var(--tint); }
 
+.contact__where {
+  margin-top: 22px;
+  font-size: 15px;
+  color: var(--ink-2);
+  max-width: 40ch;
+}
+
 /* ── страница документа ─────────────────────────────────── */
 
 .legal {
@@ -1570,6 +1653,8 @@ body::after {
 @media (max-width: 860px) {
   .claim { grid-template-columns: 1fr; align-items: start; }
   .section-head { grid-template-columns: 1fr; }
+  .cta { grid-template-columns: 1fr; }
+  .cta__actions { justify-content: flex-start; }
   .swatches__grid { grid-template-columns: repeat(6, 1fr); }
   .swatch { height: 46px; }
   .facts dl { grid-template-columns: 1fr 1fr; }

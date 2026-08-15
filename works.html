@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Работы — Twelve Sites</title>
+<meta name="description" content="Двенадцать сайтов студии Twelve Sites: лендинги, сайты-визитки и каталоги. У каждой работы своя визуальная идея — карточка листает сайт целиком.">
+<meta property="og:title" content="Работы студии Twelve Sites">
+<meta property="og:image" content="assets/shots/talay-dao-hero.jpg">
+<meta name="theme-color" content="#e9e9e3">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="styles.css">
+<script>
+  (function () {
+    var mode = 'auto';
+    try { mode = localStorage.getItem('theme') || 'auto'; } catch (e) {}
+    var dark = mode === 'dark' ||
+      (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    document.documentElement.dataset.mode = mode;
+  })();
+</script>
+</head>
+<body>
+
+<canvas class="bg" id="bg" aria-hidden="true"></canvas>
+<a class="skip" href="#main">Перейти к содержанию</a>
+
+<header class="bar">
+  <a class="bar__me" href="index.html">
+    <span class="mark" aria-hidden="true">12</span>
+    <span class="bar__name">TWELVE SITES</span>
+    <span class="bar__role">веб-студия</span>
+  </a>
+  <nav class="bar__nav" aria-label="Разделы">
+    <a href="services.html">Услуги</a>
+    <a href="works.html" aria-current="page">Работы</a>
+    <a href="prices.html">Цены</a>
+    <a href="team.html">Команда</a>
+    <a href="contacts.html">Контакты</a>
+  </nav>
+  <div class="theme" role="group" aria-label="Оформление">
+    <button class="theme__btn" type="button" data-set="auto">Авто</button>
+    <button class="theme__btn" type="button" data-set="light">День</button>
+    <button class="theme__btn" type="button" data-set="dark">Ночь</button>
+  </div>
+  <a class="btn btn--solid bar__cta" href="contacts.html">Обсудить проект</a>
+  <span class="bar__ink" aria-hidden="true"></span>
+</header>
+
+<main id="main">
+
+  <section class="page-head">
+    <p class="eyebrow">Twelve Sites &nbsp;·&nbsp; работы</p>
+    <h1>Двенадцать сайтов, ни одного похожего</h1>
+    <p class="page-head__lead">
+      Каждая карточка листает сайт целиком — наведите курсор. Нажмите,
+      чтобы открыть страницу в полный размер, посмотреть телефонный вид
+      и прочитать, что внутри.
+    </p>
+  </section>
+
+  <section class="works">
+    <div class="works__head">
+      <h2 class="h2">Все работы</h2>
+      <p class="works__note">
+        Фильтр помогает найти то, что ближе к вашей задаче.
+      </p>
+      <div class="filters" role="group" aria-label="Фильтр работ">
+        <button class="filter is-on" data-kind="all">Все</button>
+        <button class="filter" data-kind="landing">Лендинги</button>
+        <button class="filter" data-kind="card">Сайты-визитки</button>
+        <button class="filter" data-kind="shop">Каталоги и магазины</button>
+      </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <noscript>
+      <p class="noscript">
+        Работы подгружаются скриптом — включите JavaScript или напишите нам,
+        и мы пришлём ссылки на сайты списком.
+      </p>
+    </noscript>
+  </section>
+
+  <section class="claim">
+    <p>Сайт перестаёт работать, когда выглядит как у соседа по нише.
+      Поэтому каждый проект начинается <em>с идеи, а не с шаблона</em>.</p>
+    <div class="swatches">
+      <p class="swatches__note">Двенадцать работ — двенадцать палитр</p>
+      <div class="swatches__grid" id="swatches"></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div>
+      <h2 class="h2">Хотите так же?</h2>
+      <p>Расскажите про бизнес — придумаем идею под вашу нишу
+        и покажем первый экран до начала работы.</p>
+    </div>
+    <div class="cta__actions">
+      <a class="btn btn--solid" href="contacts.html">Обсудить проект <span aria-hidden="true">→</span></a>
+      <a class="btn" href="prices.html">Узнать стоимость</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p>Twelve Sites — сайты собираем руками: HTML, CSS, JavaScript. Без конструкторов и готовых шаблонов.</p>
+  <p>Плохотников Эдуард Александрович · Краснодар, работаем по всей России · 2026 · <a href="privacy.html">Политика обработки данных</a></p>
+</footer>
+
+<!-- просмотр работы целиком -->
+<div class="viewer" id="viewer" hidden>
+  <div class="viewer__backdrop" data-close></div>
+  <div class="viewer__panel" role="dialog" aria-modal="true" aria-labelledby="viewer-name">
+    <div class="viewer__info">
+      <p class="viewer__label"><span id="viewer-no"></span> <span id="viewer-kind"></span></p>
+      <h2 class="viewer__name" id="viewer-name"></h2>
+      <p class="viewer__field" id="viewer-field"></p>
+      <p class="viewer__idea" id="viewer-idea"></p>
+      <p class="viewer__desc" id="viewer-desc"></p>
+      <ul class="viewer__bullets" id="viewer-bullets"></ul>
+      <ul class="viewer__tags" id="viewer-tags"></ul>
+      <a class="btn btn--solid viewer__live" id="viewer-live" href="#" target="_blank" rel="noopener">Открыть живой сайт</a>
+      <figure class="viewer__phone">
+        <img id="viewer-phone" alt="" width="390" height="844" loading="lazy">
+        <figcaption>Тот же сайт на телефоне</figcaption>
+      </figure>
+    </div>
+    <div class="viewer__page">
+      <img id="viewer-full" alt="" loading="lazy">
+    </div>
+    <button class="viewer__close" data-close aria-label="Закрыть">✕<span>Esc</span></button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
