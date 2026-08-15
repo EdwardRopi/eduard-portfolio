@@ -246,30 +246,209 @@ document.querySelectorAll('.filter').forEach((btn) => {
   });
 });
 
-/* ── лента превью в шапке ───────────────────────────────── */
+/* ── лента работ на первом экране ───────────────────────── */
 
-const strip = document.getElementById('strip');
+/* Две колонки едут снизу вверх с разной скоростью. Внутри каждой
+   набор повторён дважды: пока уезжает первый, второй занимает его место. */
+function fillStream() {
+  const stream = document.getElementById('stream');
+  if (!stream) return;
 
-function fillStrip() {
-  // два одинаковых набора подряд: пока уезжает первый, второй занимает его место
-  for (let pass = 0; pass < 2; pass += 1) {
-    WORKS.forEach((work, i) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'strip__item';
-      b.style.setProperty('--accent', work.accent);
-      b.innerHTML = `<img src="${shot(work.id, 'hero')}" alt="" width="1200" height="750"
-                          loading="lazy" decoding="async"><span>${work.name}</span>`;
-      b.setAttribute('aria-label', `Открыть работу «${work.name}»`);
-      if (pass === 1) b.setAttribute('aria-hidden', 'true');
-      b.addEventListener('click', () => openViewer(work, i));
-      strip.append(b);
-    });
-  }
-  if (lessMotion.matches) strip.classList.add('is-still');
+  const columns = [WORKS.filter((_, i) => i % 2 === 0), WORKS.filter((_, i) => i % 2 === 1)];
+
+  columns.forEach((list, col) => {
+    const track = document.createElement('div');
+    track.className = 'stream__col';
+    track.style.setProperty('--speed', col === 0 ? '46s' : '58s');
+
+    for (let pass = 0; pass < 2; pass += 1) {
+      list.forEach((work) => {
+        const card = document.createElement('figure');
+        card.className = 'stream__item';
+        card.style.setProperty('--accent', work.accent);
+        card.innerHTML = `<img src="${shot(work.id, 'hero')}" alt="" width="1200" height="750"
+                               loading="lazy" decoding="async"><figcaption>${work.name}</figcaption>`;
+        track.append(card);
+      });
+    }
+    stream.append(track);
+  });
+
+  if (lessMotion.matches) stream.classList.add('is-still');
 }
 
-fillStrip();
+fillStream();
+
+/* ── пакеты и цены ──────────────────────────────────────── */
+
+const PRICES = [
+  {
+    name: 'Визитка',
+    price: '7 000 ₽',
+    term: '2–3 дня',
+    about: 'Чтобы у бизнеса появился нормальный адрес в интернете.',
+    items: [
+      'Одна страница со всем необходимым',
+      'Кнопки звонка и WhatsApp',
+      'Форма заявки',
+      'Адаптив под телефон',
+      'Один круг правок',
+    ],
+  },
+  {
+    name: 'Лендинг',
+    price: '13 000 ₽',
+    term: '5–7 дней',
+    about: 'Основной пакет: страница, которая объясняет и продаёт.',
+    popular: true,
+    items: [
+      '9–12 блоков под вашу нишу',
+      'Портфолио и отзывы',
+      'Тексты пишем мы',
+      'Яндекс.Метрика с целями',
+      'Базовое SEO',
+      'Три круга правок',
+    ],
+  },
+  {
+    name: 'Сайт под рекламу',
+    price: '20 000 ₽',
+    term: '10–14 дней',
+    about: 'Когда на сайт идёт платный трафик и важна каждая заявка.',
+    items: [
+      'До шести страниц',
+      'Посадочные под рекламные кампании',
+      'Заявки в Telegram и Google Таблицу',
+      'Почта на вашем домене',
+      'Месяц поддержки после сдачи',
+    ],
+  },
+];
+
+function fillPrices() {
+  const box = document.getElementById('prices-grid');
+  if (!box) return;
+
+  PRICES.forEach((plan, i) => {
+    const card = document.createElement('article');
+    card.className = 'plan' + (plan.popular ? ' plan--popular' : '');
+    card.style.setProperty('--i', i);
+    card.innerHTML = `
+      ${plan.popular ? '<p class="plan__flag">Чаще всего берут</p>' : ''}
+      <h3 class="plan__name">${plan.name}</h3>
+      <p class="plan__price">${plan.price}</p>
+      <p class="plan__term">${plan.term}</p>
+      <p class="plan__about">${plan.about}</p>
+      <ul class="plan__items">${plan.items.map((t) => `<li>${t}</li>`).join('')}</ul>
+      <a class="btn ${plan.popular ? 'btn--solid' : ''} plan__cta" href="#contact">Выбрать</a>`;
+    box.append(card);
+  });
+}
+
+fillPrices();
+
+/* ── команда ────────────────────────────────────────────── */
+
+/* Чтобы добавить человека — допишите объект в массив.
+     name  — имя
+     role  — чем занимается в студии
+     about — одна-две строки о человеке
+     photo — путь к фотографии, например 'assets/team/ivan.jpg'
+             если фотографии нет, в карточке покажутся инициалы
+     tint  — цвет плашки: var(--c-1) … var(--c-6) */
+const TEAM = [
+  {
+    name: 'Эдуард Плохотников',
+    role: 'Основатель, дизайн и разработка',
+    about: 'Ведёт проект от первого разговора до работающего адреса: придумывает идею, рисует, верстает и выкладывает.',
+    tint: 'var(--c-1)',
+  },
+];
+
+function initials(name) {
+  return name.split(' ').slice(0, 2).map((part) => part[0]).join('');
+}
+
+function fillTeam() {
+  const box = document.getElementById('team-grid');
+  if (!box) return;
+
+  TEAM.forEach((person, i) => {
+    const card = document.createElement('article');
+    card.className = 'mate';
+    card.style.setProperty('--tint', person.tint || 'var(--c-1)');
+    card.style.setProperty('--i', i);
+    const face = person.photo
+      ? `<img src="${person.photo}" alt="${person.name}" loading="lazy">`
+      : `<span aria-hidden="true">${initials(person.name)}</span>`;
+    card.innerHTML = `
+      <div class="mate__face">${face}</div>
+      <h3 class="mate__name">${person.name}</h3>
+      <p class="mate__role">${person.role}</p>
+      <p class="mate__about">${person.about}</p>`;
+    box.append(card);
+  });
+
+  // пока студия небольшая — честно говорим, кого подключаем под задачу
+  const note = document.createElement('article');
+  note.className = 'mate mate--note';
+  note.style.setProperty('--i', TEAM.length);
+  note.innerHTML = `
+    <h3 class="mate__name">Под задачу подключаем</h3>
+    <p class="mate__about">Копирайтера, фотографа и специалиста по рекламе —
+      когда проекту это нужно. Вы платите за работу, а не за штат.</p>`;
+  box.append(note);
+}
+
+fillTeam();
+
+/* ── форма заявки ───────────────────────────────────────── */
+
+/* Пока адрес пустой, форма не отправляется: она честно предлагает
+   написать в Telegram. Чтобы включить отправку, заведите форму на
+   formspree.io и вставьте сюда её адрес. */
+const FORM_ENDPOINT = '';
+
+const form = document.getElementById('form');
+const formNote = document.getElementById('form-note');
+
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+
+    if (!data.get('name') || !data.get('contact')) {
+      formNote.textContent = 'Заполните имя и способ связи — иначе мы не сможем ответить.';
+      return;
+    }
+    if (!data.get('agree')) {
+      formNote.textContent = 'Нужно согласие на обработку данных.';
+      return;
+    }
+
+    if (!FORM_ENDPOINT) {
+      formNote.innerHTML = 'Форма ещё не подключена к почте. Напишите, пожалуйста, ' +
+        '<a href="https://t.me/edward_Proishodit">в Telegram</a> или позвоните: ' +
+        '<a href="tel:+79933080951">+7 993 308-09-51</a>.';
+      return;
+    }
+
+    formNote.textContent = 'Отправляем…';
+    try {
+      const res = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        body: data,
+        headers: { Accept: 'application/json' },
+      });
+      if (!res.ok) throw new Error('bad status');
+      form.reset();
+      formNote.textContent = 'Заявка ушла. Ответим сегодня.';
+    } catch (err) {
+      formNote.innerHTML = 'Не получилось отправить. Напишите ' +
+        '<a href="https://t.me/edward_Proishodit">в Telegram</a> — так быстрее.';
+    }
+  });
+}
 
 /* ── палитра работ во вставке ───────────────────────────── */
 
@@ -570,7 +749,10 @@ if (!lessMotion.matches && 'IntersectionObserver' in window) {
     });
   }, { rootMargin: '0px 0px -6% 0px', threshold: 0.08 });
 
-  document.querySelectorAll('.facts, .works__head, .work, .steps li, .more article, .contact')
+  document.querySelectorAll(
+    '.facts, .section-head, .works__head, .work, .services__grid article, ' +
+    '.plan, .steps li, .mate, .faq details, .contact',
+  )
     .forEach((el) => {
       el.classList.add('reveal');
       io.observe(el);
