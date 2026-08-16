@@ -223,7 +223,7 @@ function prepareScroll(frame, work) {
 }
 
 /* На главной сетка урезана атрибутом data-limit, на странице работ
-   показываются все двенадцать. */
+   показываются все. */
 function render(kind) {
   if (!grid) return;
   const limit = Number(grid.dataset.limit) || WORKS.length;
@@ -954,10 +954,11 @@ function countUp(el) {
     const t = Math.min(1, (now - started) / duration);
     const eased = 1 - Math.pow(1 - t, 3);
     let i = 0;
-    el.textContent = source.replace(/\d+/g, () => {
+    el.textContent = source.replace(/\d+/g, (chunk) => {
+      // ширину сохраняем: иначе «7 000» на середине анимации схлопывается в «7 0»
       const value = Math.round(targets[i] * eased);
       i += 1;
-      return String(value);
+      return String(value).padStart(chunk.length, '0');
     });
     if (t < 1) requestAnimationFrame(step);
     else el.textContent = source;
