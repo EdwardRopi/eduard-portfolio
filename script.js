@@ -394,7 +394,10 @@ function fillTeam() {
     box.append(card);
   });
 
-  // пока студия небольшая — честно говорим, кого подключаем под задачу
+  // пока людей мало, карточки держим шире — так ряд не выглядит обрубленным
+  if (TEAM.length < 3) box.classList.add('team__grid--few');
+
+  // и честно говорим, кого подключаем под задачу
   const note = document.createElement('article');
   note.className = 'mate mate--note';
   note.style.setProperty('--i', TEAM.length);
@@ -688,6 +691,23 @@ function buildMenu() {
 }
 
 buildMenu();
+
+/* Ссылки на разделы в подвале — из той же навигации, что и наверху. */
+function buildFootNav() {
+  const foot = document.querySelector('.foot');
+  const nav = document.querySelector('.bar__nav');
+  if (!foot || !nav || foot.querySelector('.foot__nav')) return;
+
+  const list = document.createElement('nav');
+  list.className = 'foot__nav';
+  list.setAttribute('aria-label', 'Разделы в подвале');
+  list.innerHTML = [...nav.querySelectorAll('a')]
+    .map((a) => `<a href="${a.getAttribute('href')}">${a.textContent}</a>`)
+    .join('');
+  foot.append(list);
+}
+
+buildFootNav();
 
 /* ── шкала прочитанного в верхней панели ────────────────── */
 
