@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Twelve Sites — прототип «Хамелеон»</title>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<link rel="stylesheet" href="fonts.css">
+<style>
+/* ============================================================
+   ПРОТОТИП 1 — «ХАМЕЛЕОН»
+   У студии нет своего цвета: страница принимает цвет той работы,
+   которую вы сейчас смотрите. Цвет затекает снизу вверх.
+   ============================================================ */
+
+:root {
+  --base:   #0D0D0F;   /* нейтральная основа студии */
+  --base-on:#F2F0EC;
+  --ink:    #0D0D0F;   /* цвет текущей работы */
+  --on:     #F2F0EC;   /* что читается поверх --ink */
+  --dim:    color-mix(in srgb, var(--on) 58%, transparent);
+  --hair:   color-mix(in srgb, var(--on) 18%, transparent);
+
+  --display: 'Unbounded', 'Geologica', system-ui, sans-serif;
+  --body:    'Golos Text', 'Manrope', system-ui, sans-serif;
+  --mono:    'IBM Plex Mono', ui-monospace, monospace;
+
+  --pad: clamp(20px, 5vw, 72px);
+  --wide: 1440px;
+}
+
+* { box-sizing: border-box; }
+
+/* clip, а не hidden: не ломает position: sticky и не даёт
+   развёрнутым снимкам работ утащить страницу вбок */
+html { scroll-behavior: smooth; overflow-x: clip; }
+
+body {
+  margin: 0;
+  background: var(--base);
+  color: var(--on);
+  font-family: var(--body);
+  font-size: clamp(15px, 1.05vw, 17px);
+  line-height: 1.6;
+  transition: color .45s ease;
+  overflow-x: hidden;
+}
+
+/* заливка: два слоя, новый цвет поднимается снизу и становится базой */
+.flood { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
+.flood span { position: absolute; inset: 0; display: block; }
+.flood__a { background: var(--base); }
+.flood__b { background: var(--base); transform: translate3d(0, 100%, 0); }
+.flood__b.is-in { transform: translate3d(0, 0, 0); transition: transform .62s cubic-bezier(.65, 0, .35, 1); }
+
+a { color: inherit; }
+
+::selection { background: var(--on); color: var(--ink); }
+
+:focus-visible { outline: 2px solid var(--on); outline-offset: 3px; }
+
+.skip {
+  position: absolute; left: -999px; top: 0; z-index: 20;
+  padding: 12px 18px; background: var(--on); color: var(--ink);
+}
+.skip:focus { left: 8px; top: 8px; }
+
+/* ── шапка ───────────────────────────────────────────────────
+   Красит себя тем же контрастным цветом, что и текст страницы:
+   mix-blend-mode: difference здесь врёт — на золоте #B8960A
+   он выдаёт грязный синий. */
+.bar {
+  position: fixed; inset: 0 0 auto; z-index: 10;
+  display: flex; align-items: center; gap: clamp(14px, 3vw, 40px);
+  padding: 18px var(--pad);
+  color: var(--on);
+  /* фон того же цвета, что и заливка, и с той же кривой: в первом
+     экране он не виден, а при прокрутке текст не лезет под шапку */
+  background: var(--ink);
+  font-family: var(--mono); font-size: 12px; letter-spacing: .06em;
+  text-transform: uppercase;
+  transition: color .45s ease, background .62s cubic-bezier(.65, 0, .35, 1);
+}
+.bar__me { display: flex; align-items: baseline; gap: 10px; text-decoration: none; }
+.bar__mark {
+  font-family: var(--display); font-weight: 800; font-size: 17px;
+  letter-spacing: -.03em; text-transform: none;
+}
+.bar__role { opacity: .55; letter-spacing: .1em; }
+.bar nav { margin-left: auto; display: flex; gap: clamp(12px, 2vw, 26px); }
+.bar nav a { text-decoration: none; opacity: .62; }
+.bar nav a:hover { opacity: 1; }
+@media (max-width: 860px) { .bar nav { display: none; } .bar { padding: 14px var(--pad); } }
+
+/* ── общие приёмы ────────────────────────────────────────── */
+.wrap { max-width: var(--wide); margin: 0 auto; padding-inline: var(--pad); }
+
+.tag {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--dim);
+}
+
+.h2 {
+  font-family: var(--display); font-weight: 300;
+  font-size: clamp(30px, 5vw, 62px); line-height: .98;
+  letter-spacing: -.035em; margin: 0;
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 26px; border: 1px solid var(--hair); border-radius: 999px;
+  font-family: var(--mono); font-size: 12px; letter-spacing: .1em;
+  text-transform: uppercase; text-decoration: none;
+  transition: background .25s, color .25s, border-color .25s;
+}
+.btn:hover { border-color: var(--on); }
+.btn--solid { background: var(--on); color: var(--ink); border-color: var(--on); }
+.btn--solid:hover { background: transparent; color: var(--on); }
+
+/* ── первый экран ────────────────────────────────────────── */
+/* только padding-block: горизонтальные поля приходят из .wrap */
+.hero {
+  min-height: 100svh; display: grid; align-content: center;
+  padding-block: 140px clamp(60px, 10vh, 120px);
+}
+.hero__title {
+  font-family: var(--display); font-weight: 300;
+  font-size: clamp(38px, 8.2vw, 128px); line-height: .93;
+  letter-spacing: -.045em; margin: 26px 0 0; max-width: 15ch;
+}
+.hero__title b { font-weight: 800; }
+.hero__title span { display: block; overflow: hidden; }
+.hero__title i { display: block; font-style: normal; transform: translateY(105%); }
+.is-ready .hero__title i { transform: none; transition: transform 1s cubic-bezier(.2, .8, .2, 1); }
+.is-ready .hero__title span:nth-child(2) i { transition-delay: .09s; }
+.is-ready .hero__title span:nth-child(3) i { transition-delay: .18s; }
+
+.hero__lead { max-width: 46ch; margin: 32px 0 0; color: var(--dim); font-size: 1.05rem; }
+.hero__act { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+
+/* палитра: двенадцать полос, наведение перекрашивает страницу */
+.palette { margin-top: clamp(48px, 9vh, 96px); }
+.palette__row { display: flex; gap: 4px; height: 84px; }
+.palette__bar {
+  flex: 1; border: 0; padding: 0; cursor: pointer; position: relative;
+  background: var(--c); border-radius: 3px;
+  transition: flex .4s cubic-bezier(.65, 0, .35, 1), opacity .3s;
+  opacity: .82;
+}
+.palette__bar:hover, .palette__bar:focus-visible { flex: 2.4; opacity: 1; }
+.palette__bar span {
+  position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%);
+  font-family: var(--mono); font-size: 10px; letter-spacing: .04em;
+  color: var(--bar-on); opacity: 0; transition: opacity .3s; white-space: nowrap;
+}
+.palette__bar:hover span, .palette__bar:focus-visible span { opacity: 1; }
+.palette__note { margin: 14px 0 0; }
+@media (max-width: 720px) { .palette__row { height: 56px; } .palette__bar span { display: none; } }
+
+/* ── факты ───────────────────────────────────────────────── */
+.facts { border-top: 1px solid var(--hair); }
+.facts dl { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0; }
+.facts div { padding: 34px clamp(14px, 2vw, 28px) 38px; border-left: 1px solid var(--hair); }
+.facts div:first-child { border-left: 0; padding-left: 0; }
+.facts dt {
+  font-family: var(--display); font-weight: 300;
+  font-size: clamp(26px, 3.4vw, 46px); letter-spacing: -.04em;
+}
+.facts dd { margin: 8px 0 0; color: var(--dim); font-size: .9rem; max-width: 24ch; }
+@media (max-width: 860px) { .facts dl { grid-template-columns: repeat(2, 1fr); } }
+
+/* ── услуги ──────────────────────────────────────────────── */
+.services { padding-block: clamp(80px, 14vh, 170px); }
+.services__grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: clamp(24px, 3vw, 48px); margin-top: clamp(40px, 6vh, 72px);
+}
+.services__grid article { border-top: 1px solid var(--on); padding-top: 18px; }
+.services__grid h3 {
+  font-family: var(--display); font-weight: 500; font-size: 1.05rem;
+  letter-spacing: -.02em; margin: 0 0 10px;
+}
+.services__grid p { margin: 0; color: var(--dim); font-size: .92rem; }
+@media (max-width: 900px) { .services__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .services__grid { grid-template-columns: 1fr; } }
+
+/* ── работы: каждая забирает экран и цвет ────────────────── */
+.work { min-height: 100svh; display: grid; align-content: center; padding-block: 12vh; }
+.work__in {
+  display: grid; grid-template-columns: 1.02fr .98fr;
+  gap: clamp(30px, 5vw, 80px); align-items: center;
+}
+.work__formula { display: flex; align-items: center; gap: 12px; }
+.work__chip {
+  width: 11px; height: 11px; border-radius: 2px;
+  background: var(--on); opacity: .9;
+}
+.work__name {
+  font-family: var(--display); font-weight: 300;
+  font-size: clamp(34px, 6.4vw, 96px); line-height: .95;
+  letter-spacing: -.045em; margin: 16px 0 0;
+}
+.work__field { margin: 14px 0 0; color: var(--dim); }
+.work__idea {
+  font-family: var(--display); font-weight: 300;
+  font-size: clamp(17px, 1.9vw, 27px); line-height: 1.28;
+  letter-spacing: -.02em; margin: 30px 0 0; max-width: 22ch;
+}
+.work__idea::before { content: '«'; opacity: .4; }
+.work__idea::after  { content: '»'; opacity: .4; }
+.work__desc { margin: 20px 0 0; color: var(--dim); max-width: 46ch; font-size: .95rem; }
+.work__tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 0; padding: 0; list-style: none; }
+.work__tags li {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .06em;
+  padding: 5px 11px; border: 1px solid var(--hair); border-radius: 999px;
+}
+.work__act { margin-top: 30px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+.work__shot {
+  margin: 0; position: relative;
+  transform: perspective(1400px) rotateY(-7deg) rotateX(2deg) translateZ(0);
+  transition: transform .7s cubic-bezier(.2, .8, .2, 1);
+}
+.work:hover .work__shot { transform: perspective(1400px) rotateY(-3deg) rotateX(1deg); }
+.work__shot img {
+  display: block; width: 100%; height: auto; border-radius: 4px;
+  box-shadow: 0 40px 90px -30px rgba(0, 0, 0, .7);
+}
+@media (max-width: 900px) {
+  .work__in { grid-template-columns: 1fr; }
+  .work__shot { transform: none; order: -1; }
+  .work { min-height: auto; padding-block: 9vh; }
+}
+
+/* ── цены ────────────────────────────────────────────────── */
+.prices { padding-block: clamp(80px, 14vh, 170px); }
+.prices__grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2vw, 30px); margin-top: clamp(40px, 6vh, 72px);
+}
+.plan {
+  border: 1px solid var(--hair); border-radius: 6px;
+  padding: clamp(24px, 2.4vw, 38px); display: flex; flex-direction: column;
+}
+.plan--pop { border-color: var(--on); }
+.plan__flag { margin: 0 0 14px; }
+.plan__name { font-family: var(--display); font-weight: 500; font-size: 1.1rem; margin: 0; }
+.plan__price {
+  font-family: var(--display); font-weight: 300;
+  font-size: clamp(30px, 3.6vw, 48px); letter-spacing: -.04em; margin: 12px 0 0;
+}
+.plan__term { margin: 6px 0 0; color: var(--dim); font-size: .85rem; }
+.plan__about { margin: 18px 0 0; color: var(--dim); font-size: .92rem; }
+.plan ul { list-style: none; margin: 22px 0 28px; padding: 0; font-size: .92rem; }
+.plan li { padding: 9px 0 9px 20px; border-top: 1px solid var(--hair); position: relative; }
+.plan li::before { content: '·'; position: absolute; left: 4px; opacity: .5; }
+.plan .btn { margin-top: auto; align-self: flex-start; }
+@media (max-width: 860px) { .prices__grid { grid-template-columns: 1fr; } }
+
+/* ── призыв: пустой образец под новый цвет ───────────────── */
+.cta { padding-block: clamp(80px, 14vh, 170px); }
+.cta__in { display: grid; grid-template-columns: 1fr auto; gap: clamp(30px, 5vw, 70px); align-items: center; }
+.cta p { max-width: 42ch; color: var(--dim); margin: 20px 0 0; }
+.cta__act { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+.swatch {
+  width: clamp(160px, 22vw, 260px); aspect-ratio: 1;
+  border: 2px dashed var(--hair); border-radius: 6px;
+  display: grid; place-content: center; text-align: center; gap: 6px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--dim);
+}
+@media (max-width: 860px) { .cta__in { grid-template-columns: 1fr; } .swatch { order: -1; } }
+
+/* ── подвал ──────────────────────────────────────────────── */
+.foot {
+  border-top: 1px solid var(--hair); padding-block: 40px 60px;
+  font-size: .85rem; color: var(--dim);
+}
+.foot p { margin: 0 0 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition-duration: .01ms !important; }
+  .hero__title i { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="flood" aria-hidden="true"><span class="flood__a" id="floodA"></span><span class="flood__b" id="floodB"></span></div>
+<a class="skip" href="#main">Перейти к содержанию</a>
+
+<header class="bar">
+  <a class="bar__me" href="#main">
+    <span class="bar__mark">Twelve Sites</span>
+    <span class="bar__role">веб-студия</span>
+  </a>
+  <nav aria-label="Разделы">
+    <a href="#services">Услуги</a>
+    <a href="#works">Работы</a>
+    <a href="#prices">Цены</a>
+    <a href="#cta">Контакты</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <section class="hero wrap" data-ink="base">
+    <p class="tag">Веб-студия · Краснодар · работаем по всей России</p>
+    <h1 class="hero__title">
+      <span><i>Сайты, которые</i></span>
+      <span><i>не похожи на</i></span>
+      <span><i><b>соседей по нише</b></i></span>
+    </h1>
+    <p class="hero__lead">
+      Придумываем визуальную идею, рисуем, верстаем руками и выкладываем в интернет.
+      От первого разговора до работающего адреса — без агентской надстройки,
+      конструкторов и готовых шаблонов.
+    </p>
+    <div class="hero__act">
+      <a class="btn btn--solid" href="#cta">Обсудить проект</a>
+      <a class="btn" href="#prices">Узнать стоимость</a>
+    </div>
+
+    <div class="palette">
+      <div class="palette__row" id="palette"></div>
+      <p class="tag palette__note">Своего цвета у студии нет — наведите на любой</p>
+    </div>
+  </section>
+
+  <section class="facts" data-ink="base" aria-label="Коротко о студии">
+    <div class="wrap">
+      <dl>
+        <div><dt>7 000 ₽</dt><dd>минимальный бюджет: визитка под ключ</dd></div>
+        <div><dt>2–14</dt><dd>дней от брифа до публикации</dd></div>
+        <div><dt>50/50</dt><dd>половина вперёд, половина при сдаче</dd></div>
+        <div><dt>100%</dt><dd>сайтов адаптированы под телефон</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="services wrap" id="services" data-ink="base">
+    <p class="tag">Что делаем</p>
+    <h2 class="h2">Берём проект целиком</h2>
+    <div class="services__grid">
+      <article>
+        <h3>Сайт-визитка и лендинг</h3>
+        <p>Одна страница, которая отвечает на вопросы клиента и приводит заявку.</p>
+      </article>
+      <article>
+        <h3>Каталог и магазин</h3>
+        <p>Товары с фильтрами, карточка товара и заявка. Прайсы поставщиков импортируются.</p>
+      </article>
+      <article>
+        <h3>Мини-приложения в Telegram</h3>
+        <p>Трекеры, записи, подписки и оплата прямо внутри мессенджера.</p>
+      </article>
+      <article>
+        <h3>Редизайн и доработка</h3>
+        <p>Берём то, что уже есть, и приводим в порядок: вид, скорость, заявки.</p>
+      </article>
+    </div>
+  </section>
+
+  <div id="works"></div>
+
+  <section class="prices wrap" id="prices" data-ink="base">
+    <p class="tag">Сколько стоит</p>
+    <h2 class="h2">Цена известна до начала работы</h2>
+    <div class="prices__grid" id="prices-grid"></div>
+  </section>
+
+  <section class="cta wrap" id="cta" data-ink="base">
+    <div class="cta__in">
+      <div>
+        <h2 class="h2">Расскажите про задачу</h2>
+        <p>Напишите пару строк о бизнесе и о том, какой сайт нужен. В ответ пришлём
+          сроки, цену и пару примеров из вашей ниши.</p>
+        <div class="cta__act">
+          <a class="btn btn--solid" href="https://t.me/edward_Proishodit">Написать в Telegram</a>
+          <a class="btn" href="tel:+79933080951">+7 993 308-09-51</a>
+        </div>
+      </div>
+      <div class="swatch"><span>Здесь будет</span><span>ваш цвет</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot wrap" data-ink="base">
+  <p>Twelve Sites — сайты собираем руками: HTML, CSS, JavaScript. Без конструкторов и готовых шаблонов.</p>
+  <p>Плохотников Эдуард Александрович · Краснодар · plokhotnikov02@inbox.ru</p>
+</footer>
+
+<script src="data.js"></script>
+<script>
+/* ── путь к снимкам живёт этажом выше ─────────────────────── */
+const shot = (id, sort) => `../assets/shots/${id}-${sort}.jpg`;
+const BASE = '#0D0D0F';
+const BASE_ON = '#F2F0EC';
+const lessMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+/* что читается поверх цвета: берём тот вариант, у которого
+   контраст выше. Порог по яркости здесь врёт — на золоте
+   #B8960A он выбирает белый, а это всего 2,8:1. */
+function luminance(hex) {
+  const v = hex.replace('#', '');
+  const ch = [0, 2, 4].map((i) => {
+    const c = parseInt(v.slice(i, i + 2), 16) / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
+}
+
+function readableOn(hex) {
+  const L = luminance(hex);
+  const light = (luminance(BASE_ON) + 0.05) / (L + 0.05);
+  const dark = (L + 0.05) / (luminance(BASE) + 0.05);
+  return light >= dark ? BASE_ON : BASE;
+}
+
+/* ── заливка снизу вверх ─────────────────────────────────── */
+const root = document.documentElement;
+const a = document.getElementById('floodA');
+const b = document.getElementById('floodB');
+let ink = BASE;
+let busy = null;
+let swap = null;
+
+function flood(next) {
+  if (next === ink) return;
+  ink = next;
+  const on = next === BASE ? BASE_ON : readableOn(next);
+  root.style.setProperty('--ink', next);
+
+  if (lessMotion.matches) {
+    a.style.background = next;
+    root.style.setProperty('--on', on);
+    return;
+  }
+
+  /* цвет текста переключаем ближе к концу подъёма: пока заливка
+     идёт, верх экрана ещё старого цвета и читается по-старому */
+  clearTimeout(swap);
+  swap = setTimeout(() => root.style.setProperty('--on', on), 380);
+
+  clearTimeout(busy);
+  b.classList.remove('is-in');
+  b.style.background = next;
+  void b.offsetWidth;              // без этого браузер склеит два кадра
+  b.classList.add('is-in');
+  busy = setTimeout(() => {
+    a.style.background = next;
+    b.classList.remove('is-in');
+  }, 640);
+}
+
+/* ── палитра в первом экране ─────────────────────────────── */
+const palette = document.getElementById('palette');
+WORKS.forEach((w) => {
+  const bar = document.createElement('button');
+  bar.type = 'button';
+  bar.className = 'palette__bar';
+  bar.style.setProperty('--c', w.accent);
+  bar.style.setProperty('--bar-on', readableOn(w.accent));
+  bar.innerHTML = `<span>${w.name}</span>`;
+  bar.setAttribute('aria-label', `Цвет работы «${w.name}»`);
+  const show = () => flood(w.accent);
+  const hide = () => flood(BASE);
+  bar.addEventListener('pointerenter', show);
+  bar.addEventListener('focus', show);
+  bar.addEventListener('pointerleave', hide);
+  bar.addEventListener('blur', hide);
+  bar.addEventListener('click', () => {
+    document.getElementById(`w-${w.id}`).scrollIntoView({ behavior: 'smooth' });
+  });
+  palette.append(bar);
+});
+
+/* ── работы: по секции на каждую ─────────────────────────── */
+const worksBox = document.getElementById('works');
+WORKS.forEach((w, i) => {
+  const sec = document.createElement('section');
+  sec.className = 'work wrap';
+  sec.id = `w-${w.id}`;
+  sec.dataset.ink = w.accent;
+  sec.innerHTML = `
+    <div class="work__in">
+      <div>
+        <p class="tag work__formula">
+          <span class="work__chip"></span>
+          ${w.id} · ${w.accent} · ${KIND_NAME[w.kind]}
+        </p>
+        <h2 class="work__name">${w.name}</h2>
+        <p class="work__field">${w.field}</p>
+        <p class="work__idea">${w.idea}</p>
+        <p class="work__desc">${w.desc}</p>
+        <ul class="work__tags">${w.tags.map((t) => `<li>${t}</li>`).join('')}</ul>
+        <div class="work__act">
+          ${w.live ? `<a class="btn btn--solid" href="${w.live}" target="_blank" rel="noopener">Открыть живой сайт</a>` : ''}
+          <a class="btn" href="#cta">Хочу такой же</a>
+        </div>
+      </div>
+      <figure class="work__shot">
+        <img src="${shot(w.id, 'hero')}" alt="Первый экран сайта «${w.name}»" loading="lazy" width="1200" height="750">
+      </figure>
+    </div>`;
+  worksBox.append(sec);
+});
+
+/* ── цены ────────────────────────────────────────────────── */
+const grid = document.getElementById('prices-grid');
+PRICES.forEach((plan) => {
+  const card = document.createElement('article');
+  card.className = 'plan' + (plan.popular ? ' plan--pop' : '');
+  card.innerHTML = `
+    ${plan.popular ? '<p class="tag plan__flag">Чаще всего берут</p>' : ''}
+    <h3 class="plan__name">${plan.name}</h3>
+    <p class="plan__price">${plan.price}</p>
+    <p class="plan__term">${plan.term}</p>
+    <p class="plan__about">${plan.about}</p>
+    <ul>${plan.items.map((t) => `<li>${t}</li>`).join('')}</ul>
+    <a class="btn" href="#cta">Выбрать</a>`;
+  grid.append(card);
+});
+
+/* ── кто сейчас в середине экрана, тот и задаёт цвет ─────── */
+const zones = document.querySelectorAll('[data-ink]');
+const seen = new Set();
+const eye = new IntersectionObserver((entries) => {
+  entries.forEach((e) => (e.isIntersecting ? seen.add(e.target) : seen.delete(e.target)));
+  const top = [...seen].sort((x, y) => x.compareDocumentPosition(y) & 4 ? -1 : 1)[0];
+  if (!top) return;
+  flood(top.dataset.ink === 'base' ? BASE : top.dataset.ink);
+}, { rootMargin: '-45% 0px -45% 0px' });
+zones.forEach((z) => eye.observe(z));
+
+requestAnimationFrame(() => document.body.classList.add('is-ready'));
+</script>
+</body>
+</html>
